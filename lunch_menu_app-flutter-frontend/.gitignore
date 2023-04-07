@@ -8,6 +8,7 @@
 .dart_tool/
 .packages
 build/
+/build/
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
@@ -94,7 +95,7 @@ lib/generated_plugin_registrant.dart
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 ### VisualStudioCode ###
-.vscode/*
+#.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -113,3 +114,20 @@ lib/generated_plugin_registrant.dart
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,dart,visualstudiocode
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.svn/
+migrate_working_dir/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
