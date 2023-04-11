@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                   Center(
                     child: Text(
                       "This ${menuWeek!.weekName}",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ),
                   ListView.builder(
