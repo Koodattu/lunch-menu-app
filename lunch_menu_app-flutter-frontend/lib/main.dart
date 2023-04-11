@@ -45,13 +45,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late MenuWeek menuWeek;
+  MenuWeek? menuWeek;
 
   @override
   void initState() {
     super.initState();
     List<MenuDay> menuDays = [];
-    List<String> dayNames = ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday"];
+    List<String> dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     for (var i = 0; i < 5; i++) {
       List<MenuCourse> menuCourses = [
         MenuCourse(courseName: "Salad$i", allergens: ""),
@@ -66,70 +66,149 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  MenuDay getMenuDay(bool tomorrow) {
+    DateTime now = DateTime.now();
+    return menuWeek!.menuDays[tomorrow ? now.weekday : now.weekday - 1];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: ListView(
-          children: [
-            Column(
-              children: [
-                const Text(
-                  "Lunch Menu App",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        child: Builder(
+          builder: (context) {
+            if (menuWeek == null) {
+              return const Center(
+                child: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: CircularProgressIndicator(),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text("Lunch"),
-                    Icon(Icons.access_time),
-                    Text("10:30-13:00"),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    Text("Salad: 4,70€"),
-                    Text("Soup: 5,60€"),
-                    Text("Main: 7,10€"),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: menuWeek.menuDays.length,
-              itemBuilder: (context, index) {
-                MenuDay menuDay = menuWeek.menuDays[index];
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      menuDay.dayName,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              );
+            } else {
+              return ListView(
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        "Lunch Menu App",
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text("Lunch"),
+                          Icon(Icons.access_time),
+                          Text("10:30-13:00"),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Text("Salad: 4,70€"),
+                          Text("Soup: 5,60€"),
+                          Text("Main: 7,10€"),
+                        ],
+                      ),
+                    ],
+                  ),
+                  DayMenuTitleWidget(
+                    relativeDay: "Today",
+                    menuDay: getMenuDay(false),
+                  ),
+                  DayMenuTitleWidget(
+                    relativeDay: "Tomorrow",
+                    menuDay: getMenuDay(true),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Center(
+                    child: Text(
+                      "This ${menuWeek!.weekName}",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: menuDay.menuCourses.length,
-                      itemBuilder: (context, index) {
-                        MenuCourse menuCourse = menuDay.menuCourses[index];
-                        return CourseCardWidget(courseName: menuCourse.courseName, allergens: menuCourse.allergens);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: menuWeek?.menuDays.length,
+                    itemBuilder: (context, index) {
+                      MenuDay menuDay = menuWeek!.menuDays[index];
+                      return DayMenuWidget(menuDay: menuDay);
+                    },
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
+    );
+  }
+}
+
+class DayMenuTitleWidget extends StatelessWidget {
+  const DayMenuTitleWidget({
+    super.key,
+    required this.relativeDay,
+    required this.menuDay,
+  });
+
+  final String relativeDay;
+  final MenuDay menuDay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(
+          height: 16,
+        ),
+        Center(
+          child: Text(
+            relativeDay,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+          ),
+        ),
+        DayMenuWidget(menuDay: menuDay),
+      ],
+    );
+  }
+}
+
+class DayMenuWidget extends StatelessWidget {
+  const DayMenuWidget({
+    super.key,
+    required this.menuDay,
+  });
+
+  final MenuDay menuDay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          menuDay.dayName,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: menuDay.menuCourses.length,
+          itemBuilder: (context, index) {
+            MenuCourse menuCourse = menuDay.menuCourses[index];
+            return CourseCardWidget(courseName: menuCourse.courseName, allergens: menuCourse.allergens);
+          },
+        ),
+      ],
     );
   }
 }
@@ -140,24 +219,24 @@ class CourseCardWidget extends StatelessWidget {
 
   const CourseCardWidget({super.key, required this.courseName, required this.allergens});
 
-  Icon getMenuTypeIcon(String courseName) {
+  ImageIcon getMenuTypeIcon(String courseName) {
     if (courseName.toLowerCase().contains("salad")) {
-      return const Icon(
-        Icons.restaurant_menu,
+      return const ImageIcon(
+        AssetImage('assets/icon_salad.png'),
         color: Colors.green,
-        size: 40,
+        size: 44,
       );
     } else if (courseName.toLowerCase().contains("soup")) {
-      return const Icon(
-        Icons.restaurant,
+      return const ImageIcon(
+        AssetImage('assets/icon_soup.png'),
         color: Colors.red,
-        size: 40,
+        size: 44,
       );
     } else {
-      return const Icon(
-        Icons.egg,
+      return const ImageIcon(
+        AssetImage('assets/icon_dinner.png'),
         color: Colors.cyan,
-        size: 40,
+        size: 44,
       );
     }
   }
@@ -172,25 +251,58 @@ class CourseCardWidget extends StatelessWidget {
           children: [
             getMenuTypeIcon(courseName),
             const SizedBox(
-              width: 10,
+              width: 16,
             ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(courseName),
+                Text(
+                  courseName,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (allergens.contains("L"))
-                      Icon(
-                        Icons.mail,
-                        color: Colors.blue.shade800,
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: Colors.blue,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(2),
+                          child: ImageIcon(
+                            AssetImage(
+                              'assets/icon_lactose_free.png',
+                            ),
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
                       ),
                     if (allergens.contains("G"))
-                      Icon(
-                        Icons.mail,
-                        color: Colors.orange.shade400,
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          color: Colors.orange,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(2),
+                          child: ImageIcon(
+                            AssetImage(
+                              'assets/icon_gluten_free.png',
+                            ),
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
                       ),
                   ],
                 ),
