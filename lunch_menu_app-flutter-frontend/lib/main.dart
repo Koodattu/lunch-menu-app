@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'model/menu_day.dart';
+import 'model/menu_week.dart';
+import 'model/menu_course.dart';
+
 void main() {
   runApp(const LunchMenuApp());
 }
 
-class LunchMenuApp extends StatelessWidget {
+class LunchMenuApp extends StatefulWidget {
   const LunchMenuApp({super.key});
 
+  @override
+  State<LunchMenuApp> createState() => _LunchMenuAppState();
+}
+
+class _LunchMenuAppState extends State<LunchMenuApp> {
   @override
   Widget build(BuildContext context) {
     final ThemeData lightTheme = ThemeData();
@@ -36,33 +45,87 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late MenuWeek menuWeek;
+
+  @override
+  void initState() {
+    super.initState();
+    List<MenuDay> menuDays = [];
+    List<String> dayNames = ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday"];
+    for (var i = 0; i < 5; i++) {
+      List<MenuCourse> menuCourses = [
+        MenuCourse(courseName: "Salad$i", allergens: ""),
+        MenuCourse(courseName: "Soup$i", allergens: "G"),
+        MenuCourse(courseName: "Main$i", allergens: "L")
+      ];
+      menuDays.add(MenuDay(dayName: "${dayNames[i]}, 1$i.4.", menuCourses: menuCourses));
+    }
+
+    setState(() {
+      menuWeek = MenuWeek(weekName: "Week 23", menuDays: menuDays);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget>[
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: Text(
-                "Today, Monday xx.xx.",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
+        child: ListView(
+          children: [
+            Column(
+              children: [
+                const Text(
+                  "Lunch Menu App",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text("Lunch"),
+                    Icon(Icons.access_time),
+                    Text("10:30-13:00"),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Text("Salad: 4,70€"),
+                    Text("Soup: 5,60€"),
+                    Text("Main: 7,10€"),
+                  ],
+                ),
+              ],
             ),
-            CourseCardWidget(
-              courseName: "Salad Salad Salad Salad",
-              allergens: "G L",
+            const SizedBox(
+              height: 16,
             ),
-            CourseCardWidget(
-              courseName: "Soup Soup Soup Soup",
-              allergens: "G",
-            ),
-            CourseCardWidget(
-              courseName: "Main Main Main Main",
-              allergens: "",
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: menuWeek.menuDays.length,
+              itemBuilder: (context, index) {
+                MenuDay menuDay = menuWeek.menuDays[index];
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      menuDay.dayName,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: menuDay.menuCourses.length,
+                      itemBuilder: (context, index) {
+                        MenuCourse menuCourse = menuDay.menuCourses[index];
+                        return CourseCardWidget(courseName: menuCourse.courseName, allergens: menuCourse.allergens);
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
