@@ -1,12 +1,11 @@
 package fi.koodattu.lunchmenuapp.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Entity
-@Table(name = "allergens")
 @Data
+@Entity
+@Table(name = "allergens", schema = "public")
 public class LunchMenuAllergen {
 
     @Id

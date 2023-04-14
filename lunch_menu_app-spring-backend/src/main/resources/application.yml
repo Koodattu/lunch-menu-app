@@ -9,6 +9,14 @@ spring:
       name: user
       password: user
 
+  # Jackson
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+      FAIL_ON_EMPTY_BEANS: false
+    deserialization:
+      unwrap-root-value: false
+
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -20,10 +28,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    open-in-view: false
+    #open-in-view: false
     generate-ddl: true
 
 # Logger configuration

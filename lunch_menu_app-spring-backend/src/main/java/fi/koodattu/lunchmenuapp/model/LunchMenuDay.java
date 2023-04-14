@@ -5,9 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
-@Entity
-@Table(name = "days")
 @Data
+@Entity
+@Table(name = "days", schema = "public")
 public class LunchMenuDay {
 
     @Id

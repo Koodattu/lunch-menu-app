@@ -30,7 +30,8 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = 200000)
     public void scheduledFetchMenuFromDrive() {
         log.info("[INFO] Fetching menu from drive.");
-
+        //if (true)
+            //return;
         try {
             String driveFileUrl = "https://drive.google.com/uc?id=1ejQntnQPCHiajV_CLB6Un9AUElxzyOP4&export=download";
             URL url = new URL(driveFileUrl);

@@ -66,9 +66,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  MenuDay getMenuDay(bool tomorrow) {
+  MenuDay? getMenuDay(bool tomorrow) {
     DateTime now = DateTime.now();
-    return menuWeek!.menuDays[tomorrow ? now.weekday : now.weekday - 1];
+    int dayOfWeek = tomorrow ? now.weekday : now.weekday - 1;
+    if (menuWeek!.menuDays.length <= dayOfWeek) {
+      return null;
+    }
+    return menuWeek!.menuDays[dayOfWeek];
   }
 
   @override
@@ -157,10 +161,13 @@ class DayMenuTitleWidget extends StatelessWidget {
   });
 
   final String relativeDay;
-  final MenuDay menuDay;
+  final MenuDay? menuDay;
 
   @override
   Widget build(BuildContext context) {
+    if (menuDay == null) {
+      return const SizedBox();
+    }
     return Column(
       children: [
         const SizedBox(
@@ -184,7 +191,7 @@ class DayMenuWidget extends StatelessWidget {
     required this.menuDay,
   });
 
-  final MenuDay menuDay;
+  final MenuDay? menuDay;
 
   @override
   Widget build(BuildContext context) {
@@ -196,15 +203,15 @@ class DayMenuWidget extends StatelessWidget {
           height: 8,
         ),
         Text(
-          menuDay.dayName,
+          menuDay!.dayName,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: menuDay.menuCourses.length,
+          itemCount: menuDay!.menuCourses.length,
           itemBuilder: (context, index) {
-            MenuCourse menuCourse = menuDay.menuCourses[index];
+            MenuCourse menuCourse = menuDay!.menuCourses[index];
             return CourseCardWidget(courseName: menuCourse.courseName, allergens: menuCourse.allergens);
           },
         ),

@@ -2,6 +2,7 @@ package fi.koodattu.lunchmenuapp.controller;
 
 import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
 import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
+import fi.koodattu.lunchmenuapp.service.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,12 @@ import java.util.Optional;
 public class LunchMenuController {
 
     @Autowired
-    LunchMenuWeekRepository lunchMenuWeekRepository;
+    LunchMenuService lunchMenuService;
 
     @GetMapping("/lunch-menu-weeks")
-    public ResponseEntity<List<LunchMenuWeek>> getAllLunchMenuWeeks() {
+    public ResponseEntity<Object> getAllLunchMenuWeeks() {
         try {
-            List<LunchMenuWeek> lunchMenuWeeks = lunchMenuWeekRepository.findAll();
+            List<LunchMenuWeek> lunchMenuWeeks = lunchMenuService.getAllWeeks();
 
             if (lunchMenuWeeks.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -28,13 +29,13 @@ public class LunchMenuController {
 
             return new ResponseEntity<>(lunchMenuWeeks, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/lunch-menu-weeks/{id}")
     public ResponseEntity<LunchMenuWeek> getLunchMenuWeekById(@PathVariable("id") long id) {
-        Optional<LunchMenuWeek> lunchMenuWeek = lunchMenuWeekRepository.findById(id);
+        Optional<LunchMenuWeek> lunchMenuWeek = lunchMenuService.getWeekById(id);
 
         if (lunchMenuWeek.isPresent()) {
             return new ResponseEntity<>(lunchMenuWeek.get(), HttpStatus.OK);
@@ -45,12 +46,11 @@ public class LunchMenuController {
 
     @GetMapping("/lunch-menu-weeks/latest")
     public ResponseEntity<LunchMenuWeek> getLatestLunchMenuWeek() {
-        List<LunchMenuWeek> lunchMenuWeeks = lunchMenuWeekRepository.findAll();
+        LunchMenuWeek lunchMenuWeek = lunchMenuService.getLatestWeek();
 
-        if (lunchMenuWeeks.isEmpty()) {
+        if (lunchMenuWeek == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            LunchMenuWeek lunchMenuWeek = lunchMenuWeeks.get(lunchMenuWeeks.size() - 1);
             return new ResponseEntity<>(lunchMenuWeek, HttpStatus.OK);
         }
     }

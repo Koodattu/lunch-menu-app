@@ -10,6 +10,10 @@ import fi.koodattu.lunchmenuapp.repository.LunchMenuDayRepository;
 import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LunchMenuService {
@@ -47,7 +51,24 @@ public class LunchMenuService {
             lunchMenuDayRepository.save(day);
         }
 
-        return lunchMenuWeekRepository.saveAndFlush(lunchMenuWeek);
+        return lunchMenuWeekRepository.save(lunchMenuWeek);
     }
 
+    public List<LunchMenuWeek> getAllWeeks(){
+        return lunchMenuWeekRepository.findAll();
+    }
+
+    public Optional<LunchMenuWeek> getWeekById(long id){
+        return lunchMenuWeekRepository.findById(id);
+    }
+
+    public LunchMenuWeek getLatestWeek(){
+        List<LunchMenuWeek> lunchMenuWeeks = lunchMenuWeekRepository.findAll();
+
+        if (lunchMenuWeeks.isEmpty()) {
+            return null;
+        } else {
+            return lunchMenuWeeks.get(lunchMenuWeeks.size() - 1);
+        }
+    }
 }
