@@ -1,28 +1,16 @@
 # Spring Boot configuration
+
+# Set active profile
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+---
+
 spring:
   profiles:
-    active: development
-
-  # Security configuration
-  security:
-    user:
-      name: user
-      password: user
-
-  # Jackson
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-      FAIL_ON_EMPTY_BEANS: false
-    deserialization:
-      unwrap-root-value: false
-
-  # Database
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/
-    username: postgres
-    password: postgres
+    active: default
 
   # JPA properties
   jpa:
@@ -32,17 +20,54 @@ spring:
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    #open-in-view: false
     generate-ddl: true
+    open-in-view: false
 
 # Logger configuration
 logging:
-  pattern:
-    console: "%d %-5level %logger : %msg%n"
+  file:
+    path: "./logs"
   level:
     org.springframework: info
     org.hibernate: debug
+    root: info
 
 # Server configuration
 server:
-  port: 8080
+  port: 8888
+  tomcat:
+    max-connections: 20
+    threads:
+      max: 5
+
+---
+
+# Dev profile
+spring:
+  profiles:
+    active: dev
+    include: "default"
+  application:
+    name: dev-app
+
+  # Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+
+---
+
+# Prod profile
+spring:
+  profiles:
+    active: prod
+    include: "default"
+  application:
+    name: prod-app
+
+  # Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
