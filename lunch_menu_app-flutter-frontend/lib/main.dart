@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import "package:http/http.dart" as http;
+
+import 'model/menu_allergen.dart';
 import 'model/menu_day.dart';
 import 'model/menu_week.dart';
 import 'model/menu_course.dart';
@@ -45,28 +49,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  MenuWeek? menuWeek;
+  late Future<MenuWeek> menuWeek;
 
   @override
   void initState() {
     super.initState();
-    List<MenuDay> menuDays = [];
-    List<String> dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-    for (var i = 0; i < 5; i++) {
-      List<MenuCourse> menuCourses = [
-        MenuCourse(courseName: "Salad$i", allergens: ""),
-        MenuCourse(courseName: "Soup$i", allergens: "G"),
-        MenuCourse(courseName: "Main$i", allergens: "L")
-      ];
-      menuDays.add(MenuDay(dayName: "${dayNames[i]}, 1$i.4.", menuCourses: menuCourses));
-    }
 
     setState(() {
-      menuWeek = MenuWeek(weekName: "Week 23", menuDays: menuDays);
+      menuWeek = fetchAlbum();
     });
   }
 
-  MenuDay? getMenuDay(bool tomorrow) {
+  Future<MenuWeek> fetchAlbum() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-weeks/latest'));
+
+    if (response.statusCode == 200) {
+      return MenuWeek.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  MenuDay? getMenuDay(MenuWeek? menuWeek, bool tomorrow) {
     DateTime now = DateTime.now();
     int dayOfWeek = tomorrow ? now.weekday : now.weekday - 1;
     if (menuWeek!.menuDays.length <= dayOfWeek) {
@@ -80,17 +84,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Builder(
-          builder: (context) {
-            if (menuWeek == null) {
-              return const Center(
-                child: SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
+        child: FutureBuilder<MenuWeek>(
+          future: menuWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return ListView(
                 children: [
                   Column(
@@ -109,43 +106,53 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Text("Salad: 4,70€"),
-                          Text("Soup: 5,60€"),
-                          Text("Main: 7,10€"),
+                        children: [
+                          Text("Salad: ${snapshot.data!.saladCoursePrice}"),
+                          Text("Soup: ${snapshot.data!.soupCoursePrice}"),
+                          Text("Main: ${snapshot.data!.mainCoursePrice}"),
                         ],
                       ),
                     ],
                   ),
                   DayMenuTitleWidget(
                     relativeDay: "Today",
-                    menuDay: getMenuDay(false),
+                    menuDay: getMenuDay(snapshot.data, false),
                   ),
                   DayMenuTitleWidget(
                     relativeDay: "Tomorrow",
-                    menuDay: getMenuDay(true),
+                    menuDay: getMenuDay(snapshot.data, true),
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   Center(
                     child: Text(
-                      "This ${menuWeek!.weekName}",
+                      "This ${snapshot.data!.weekName}",
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: menuWeek?.menuDays.length,
+                    itemCount: snapshot.data!.menuDays.length,
                     itemBuilder: (context, index) {
-                      MenuDay menuDay = menuWeek!.menuDays[index];
+                      MenuDay menuDay = snapshot.data!.menuDays[index];
                       return DayMenuWidget(menuDay: menuDay);
                     },
                   ),
                 ],
               );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
             }
+
+            return const Center(
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: CircularProgressIndicator(),
+              ),
+            );
           },
         ),
       ),
@@ -193,6 +200,21 @@ class DayMenuWidget extends StatelessWidget {
 
   final MenuDay? menuDay;
 
+  String lengthenDayName(String dayName) {
+    List<String> daysInEnglish = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    List<String> daysInFinnish = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai"];
+
+    bool useEnglishTranslation = true;
+
+    for (var i = 0; i < daysInFinnish.length; i++) {
+      if (daysInFinnish[i].startsWith(dayName.substring(0, 2))) {
+        return dayName.replaceAll(dayName.substring(0, 2), useEnglishTranslation ? daysInEnglish[i] : daysInFinnish[i]);
+      }
+    }
+
+    return dayName;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -203,7 +225,7 @@ class DayMenuWidget extends StatelessWidget {
           height: 8,
         ),
         Text(
-          menuDay!.dayName,
+          lengthenDayName(menuDay!.dayName),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         ListView.builder(
@@ -212,7 +234,8 @@ class DayMenuWidget extends StatelessWidget {
           itemCount: menuDay!.menuCourses.length,
           itemBuilder: (context, index) {
             MenuCourse menuCourse = menuDay!.menuCourses[index];
-            return CourseCardWidget(courseName: menuCourse.courseName, allergens: menuCourse.allergens);
+            return CourseCardWidget(
+                courseName: menuCourse.courseName, courseType: menuCourse.courseType, allergens: menuCourse.allergens);
           },
         ),
       ],
@@ -222,18 +245,19 @@ class DayMenuWidget extends StatelessWidget {
 
 class CourseCardWidget extends StatelessWidget {
   final String courseName;
-  final String allergens;
+  final String courseType;
+  final List<Allergen> allergens;
 
-  const CourseCardWidget({super.key, required this.courseName, required this.allergens});
+  const CourseCardWidget({super.key, required this.courseName, required this.courseType, required this.allergens});
 
   ImageIcon getMenuTypeIcon(String courseName) {
-    if (courseName.toLowerCase().contains("salad")) {
+    if (courseType.toLowerCase().contains("salad")) {
       return const ImageIcon(
         AssetImage('assets/icon_salad.png'),
         color: Colors.green,
         size: 44,
       );
-    } else if (courseName.toLowerCase().contains("soup")) {
+    } else if (courseType.toLowerCase().contains("soup")) {
       return const ImageIcon(
         AssetImage('assets/icon_soup.png'),
         color: Colors.red,
@@ -273,7 +297,7 @@ class CourseCardWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (allergens.contains("L"))
+                    if (allergens.any((i) => i.allergenSymbol == "L"))
                       Container(
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -292,7 +316,7 @@ class CourseCardWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (allergens.contains("G"))
+                    if (allergens.any((i) => i.allergenSymbol == "G"))
                       Container(
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(
