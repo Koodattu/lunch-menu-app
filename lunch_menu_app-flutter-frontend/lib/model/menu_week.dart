@@ -4,7 +4,12 @@
 
 import 'dart:convert';
 
-import 'menu_day.dart';
+List<MenuWeek> menuWeekListFromJson(String str) =>
+    List<MenuWeek>.from(json.decode(str).map((x) => MenuWeek.fromJson(x)));
+String menuWeekListToJson(List<MenuWeek> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+MenuWeek menuWeekFromJson(String str) => MenuWeek.fromJson(json.decode(str));
+String menuWeekToJson(MenuWeek data) => json.encode(data.toJson());
 
 class MenuWeek {
   MenuWeek({
@@ -23,10 +28,6 @@ class MenuWeek {
   final String mainCoursePrice;
   final List<MenuDay> menuDays;
 
-  factory MenuWeek.fromRawJson(String str) => MenuWeek.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory MenuWeek.fromJson(Map<String, dynamic> json) => MenuWeek(
         id: json["id"],
         weekName: json["weekName"],
@@ -43,5 +44,77 @@ class MenuWeek {
         "soupCoursePrice": soupCoursePrice,
         "mainCoursePrice": mainCoursePrice,
         "menuDays": List<dynamic>.from(menuDays.map((x) => x.toJson())),
+      };
+}
+
+class MenuDay {
+  MenuDay({
+    required this.id,
+    required this.dayName,
+    required this.menuCourses,
+  });
+
+  final int id;
+  final String dayName;
+  final List<MenuCourse> menuCourses;
+
+  factory MenuDay.fromJson(Map<String, dynamic> json) => MenuDay(
+        id: json["id"],
+        dayName: json["dayName"],
+        menuCourses: List<MenuCourse>.from(json["menuCourses"].map((x) => MenuCourse.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "dayName": dayName,
+        "menuCourses": List<dynamic>.from(menuCourses.map((x) => x.toJson())),
+      };
+}
+
+class MenuCourse {
+  MenuCourse({
+    required this.id,
+    required this.courseName,
+    required this.courseType,
+    required this.allergens,
+  });
+
+  final int id;
+  final String courseName;
+  final String courseType;
+  final List<Allergen> allergens;
+
+  factory MenuCourse.fromJson(Map<String, dynamic> json) => MenuCourse(
+        id: json["id"],
+        courseName: json["courseName"],
+        courseType: json["courseType"],
+        allergens: List<Allergen>.from(json["allergens"].map((x) => Allergen.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "courseName": courseName,
+        "courseType": courseType,
+        "allergens": List<dynamic>.from(allergens.map((x) => x.toJson())),
+      };
+}
+
+class Allergen {
+  Allergen({
+    required this.id,
+    required this.allergenSymbol,
+  });
+
+  final int id;
+  final String allergenSymbol;
+
+  factory Allergen.fromJson(Map<String, dynamic> json) => Allergen(
+        id: json["id"],
+        allergenSymbol: json["allergenSymbol"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "allergenSymbol": allergenSymbol,
       };
 }
