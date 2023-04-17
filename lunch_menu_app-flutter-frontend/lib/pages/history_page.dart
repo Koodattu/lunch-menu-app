@@ -36,7 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: FutureBuilder<List<MenuWeek>>(
         future: menuWeek,
         builder: (context, snapshot) {

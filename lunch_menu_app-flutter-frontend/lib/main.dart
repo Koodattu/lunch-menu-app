@@ -44,38 +44,36 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    MenuPage(),
-    HistoryPage(),
+
+  final List<Widget> pages = [
+    const MenuPage(
+      key: PageStorageKey("MenuPage"),
+    ),
+    const HistoryPage(
+      key: PageStorageKey("HistoryPage"),
+    ),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final PageStorageBucket bucket = PageStorageBucket();
+
+  Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
+        backgroundColor: Colors.black54,
+        selectedItemColor: Colors.blue,
+        onTap: (int index) => setState(() => _selectedIndex = index),
+        currentIndex: selectedIndex,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: "Menu"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant_menu),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orange,
-        backgroundColor: Colors.blue,
-        onTap: _onItemTapped,
+      bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
+      body: PageStorage(
+        bucket: bucket,
+        child: pages[_selectedIndex],
       ),
     );
   }
