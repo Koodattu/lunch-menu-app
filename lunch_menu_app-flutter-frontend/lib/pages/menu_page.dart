@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -13,15 +15,29 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  late SharedPreferences sharedPreferences;
   late Future<MenuWeek> menuWeek;
+
+  bool showToday = true;
+  bool showTomorrow = true;
 
   @override
   void initState() {
     super.initState();
+    initWeekMenu();
+  }
 
+  initWeekMenu() async {
+    getSettings();
     setState(() {
       menuWeek = fetchMenu();
     });
+  }
+
+  getSettings() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    showToday = sharedPreferences.getBool("app_settings_menu_show_today") ?? true;
+    showTomorrow = sharedPreferences.getBool("app_settings_menu_show_tomorrow") ?? true;
   }
 
   Future<MenuWeek> fetchMenu() async {
@@ -47,79 +63,87 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: FutureBuilder<MenuWeek>(
-        future: menuWeek,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    const Text(
-                      "Lunch Menu App",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Lunch"),
-                        Icon(Icons.access_time),
-                        Text("10:30-13:00"),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text("Salad: ${snapshot.data!.saladCoursePrice}"),
-                        Text("Soup: ${snapshot.data!.soupCoursePrice}"),
-                        Text("Main: ${snapshot.data!.mainCoursePrice}"),
-                      ],
-                    ),
-                  ],
-                ),
-                DayMenuTitleWidget(
-                  relativeDay: "Today",
-                  menuDay: getMenuDay(snapshot.data, false),
-                ),
-                DayMenuTitleWidget(
-                  relativeDay: "Tomorrow",
-                  menuDay: getMenuDay(snapshot.data, true),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Center(
-                  child: Text(
-                    "This ${snapshot.data!.weekName}",
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                  ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.menuDays.length,
-                  itemBuilder: (context, index) {
-                    MenuDay menuDay = snapshot.data!.menuDays[index];
-                    return DayMenuWidget(menuDay: menuDay);
-                  },
-                ),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          return const Center(
-            child: SizedBox(
-              width: 80,
-              height: 80,
-              child: CircularProgressIndicator(),
-            ),
-          );
+      child: RefreshIndicator(
+        onRefresh: () async {
+          print(context.locale.toString());
+          await initWeekMenu();
         },
+        child: FutureBuilder<MenuWeek>(
+          future: menuWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        "lunch_menu_app".tr(),
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("lunch".tr()),
+                          const Icon(Icons.access_time),
+                          const Text("10:30-13:00"),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text("salad_dish_price").tr(args: [snapshot.data!.saladCoursePrice]),
+                          const Text("soup_dish_price").tr(args: [snapshot.data!.soupCoursePrice]),
+                          const Text("main_dish_price").tr(args: [snapshot.data!.mainCoursePrice]),
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (showToday)
+                    DayMenuTitleWidget(
+                      relativeDay: "today".tr(),
+                      menuDay: getMenuDay(snapshot.data, false),
+                    ),
+                  if (showTomorrow)
+                    DayMenuTitleWidget(
+                      relativeDay: "tomorrow".tr(),
+                      menuDay: getMenuDay(snapshot.data, true),
+                    ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Center(
+                    child: Text(
+                      "this_week".tr(args: [snapshot.data!.weekName]),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data!.menuDays.length,
+                    itemBuilder: (context, index) {
+                      MenuDay menuDay = snapshot.data!.menuDays[index];
+                      return DayMenuWidget(menuDay: menuDay);
+                    },
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+
+            return const Center(
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -166,14 +190,12 @@ class DayMenuWidget extends StatelessWidget {
   final MenuDay? menuDay;
 
   String lengthenDayName(String dayName) {
-    List<String> daysInEnglish = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    List<String> weekDays = ["monday".tr(), "tuesday".tr(), "wednesday".tr(), "thursday".tr(), "friday".tr()];
     List<String> daysInFinnish = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai"];
-
-    bool useEnglishTranslation = true;
 
     for (var i = 0; i < daysInFinnish.length; i++) {
       if (daysInFinnish[i].startsWith(dayName.substring(0, 2))) {
-        return dayName.replaceAll(dayName.substring(0, 2), useEnglishTranslation ? daysInEnglish[i] : daysInFinnish[i]);
+        return dayName.replaceAll(dayName.substring(0, 2), weekDays[i]);
       }
     }
 
@@ -263,21 +285,24 @@ class CourseCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (allergens.any((i) => i.allergenSymbol == "L"))
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                          color: Colors.blue,
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(2),
-                          child: ImageIcon(
-                            AssetImage(
-                              'assets/icon_lactose_free.png',
+                      Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
                             ),
-                            color: Colors.white,
-                            size: 24,
+                            color: Colors.blue,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(2),
+                            child: ImageIcon(
+                              AssetImage(
+                                'assets/icon_lactose_free.png',
+                              ),
+                              color: Colors.white,
+                              size: 24,
+                            ),
                           ),
                         ),
                       ),

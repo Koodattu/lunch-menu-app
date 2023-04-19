@@ -1,9 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/pages/history_page.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
+import 'package:flutter_lunch_menu_app/pages/more_page.dart';
 
-void main() {
-  runApp(const LunchMenuApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale("en"), Locale("fi")],
+      path: "assets/translations",
+      fallbackLocale: const Locale("en"),
+      child: const LunchMenuApp(),
+    ),
+  );
 }
 
 class LunchMenuApp extends StatefulWidget {
@@ -20,7 +32,10 @@ class _LunchMenuAppState extends State<LunchMenuApp> {
     final ThemeData darkTheme = ThemeData.dark();
 
     return MaterialApp(
-      title: 'Lunch App',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      title: "lunch_menu".tr(),
       theme: lightTheme.copyWith(
         colorScheme: lightTheme.colorScheme.copyWith(secondary: Colors.blue),
       ),
@@ -28,7 +43,7 @@ class _LunchMenuAppState extends State<LunchMenuApp> {
         colorScheme: darkTheme.colorScheme.copyWith(secondary: Colors.blue),
       ),
       themeMode: ThemeMode.dark,
-      home: const HomePage(title: 'Lunch Menu App'),
+      home: HomePage(title: "lunch_menu_app".tr()),
     );
   }
 }
@@ -52,6 +67,9 @@ class _HomePageState extends State<HomePage> {
     const HistoryPage(
       key: PageStorageKey("HistoryPage"),
     ),
+    const MorePage(
+      key: PageStorageKey("MorePage"),
+    ),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -61,9 +79,10 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.blue,
         onTap: (int index) => setState(() => _selectedIndex = index),
         currentIndex: selectedIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: "Menu"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: const Icon(Icons.restaurant_menu), label: "menu".tr()),
+          BottomNavigationBarItem(icon: const Icon(Icons.history), label: "history".tr()),
+          BottomNavigationBarItem(icon: const Icon(Icons.more), label: "more".tr()),
         ],
       );
 
