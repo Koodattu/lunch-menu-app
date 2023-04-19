@@ -93,6 +93,7 @@ class _LanguageToggleCardState extends State<LanguageToggleCard> {
       child: InkWell(
         onTap: () async {
           await context.setLocale(Locale(context.locale.toString() == "en" ? "fi" : "en"));
+          WidgetsFlutterBinding.ensureInitialized().performReassemble();
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

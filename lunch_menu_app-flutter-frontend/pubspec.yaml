@@ -17,6 +17,7 @@ dependencies:
   package_info_plus: ^3.1.0
   store_redirect: ^2.0.1
   url_launcher: ^6.1.10
+  flutter_native_splash: ^2.2.19
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +38,15 @@ flutter:
   assets:
     - assets/
     - assets/translations/
+
+flutter_native_splash:
+  image: assets/app_icon.png
+  color: "#2e2e2e"
+
+  android_12:
+    image: assets/app_icon.png
+    color: "#2e2e2e"
+
+  android: true
+  ios: false
+  web: false
