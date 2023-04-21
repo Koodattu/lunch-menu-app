@@ -1,6 +1,7 @@
 {
     "lunch_menu_app": "Lounas Ruokalista Sovellus",
     "lunch_menu": "Lounas ruokalista",
+    "error_occurred": "Tapahtui virhe: \n\n{}",
     "lunch": "Lounas",
     "menu": "Ruokalista",
     "history": "Historia",

@@ -41,13 +41,10 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Future<MenuWeek> fetchMenu() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-weeks/latest'));
-
-    if (response.statusCode == 200) {
-      return menuWeekFromJson(utf8.decode(response.bodyBytes));
-    } else {
-      throw Exception('Failed to load menu');
-    }
+    final response = await http
+        .get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-weeks/latest'))
+        .timeout(const Duration(seconds: 10));
+    return menuWeekFromJson(utf8.decode(response.bodyBytes));
   }
 
   MenuDay? getMenuDay(MenuWeek? menuWeek, bool tomorrow) {
@@ -61,88 +58,103 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: RefreshIndicator(
+    return LayoutBuilder(
+      builder: (context, constraints) => RefreshIndicator(
         onRefresh: () async {
-          print(context.locale.toString());
           await initWeekMenu();
         },
-        child: FutureBuilder<MenuWeek>(
-          future: menuWeek,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
-                children: [
-                  Column(
-                    children: [
-                      const SizedBox(
-                        height: 8,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: FutureBuilder<MenuWeek>(
+                future: menuWeek,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "lunch_menu_app".tr(),
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("lunch".tr()),
+                                const Icon(Icons.access_time),
+                                const Text("10:30-13:00"),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                const Text("salad_dish_price").tr(args: [snapshot.data!.saladCoursePrice]),
+                                const Text("soup_dish_price").tr(args: [snapshot.data!.soupCoursePrice]),
+                                const Text("main_dish_price").tr(args: [snapshot.data!.mainCoursePrice]),
+                              ],
+                            ),
+                          ],
+                        ),
+                        if (showToday)
+                          DayMenuTitleWidget(
+                            relativeDay: "today".tr(),
+                            menuDay: getMenuDay(snapshot.data, false),
+                          ),
+                        if (showTomorrow)
+                          DayMenuTitleWidget(
+                            relativeDay: "tomorrow".tr(),
+                            menuDay: getMenuDay(snapshot.data, true),
+                          ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Center(
+                          child: Text(
+                            "this_week".tr(args: [snapshot.data!.weekName]),
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.menuDays.length,
+                          itemBuilder: (context, index) {
+                            MenuDay menuDay = snapshot.data!.menuDays[index];
+                            return DayMenuWidget(menuDay: menuDay);
+                          },
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        "error_occurred".tr(args: [snapshot.error.toString()]),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                      Text(
-                        "lunch_menu_app".tr(),
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("lunch".tr()),
-                          const Icon(Icons.access_time),
-                          const Text("10:30-13:00"),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text("salad_dish_price").tr(args: [snapshot.data!.saladCoursePrice]),
-                          const Text("soup_dish_price").tr(args: [snapshot.data!.soupCoursePrice]),
-                          const Text("main_dish_price").tr(args: [snapshot.data!.mainCoursePrice]),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (showToday)
-                    DayMenuTitleWidget(
-                      relativeDay: "today".tr(),
-                      menuDay: getMenuDay(snapshot.data, false),
-                    ),
-                  if (showTomorrow)
-                    DayMenuTitleWidget(
-                      relativeDay: "tomorrow".tr(),
-                      menuDay: getMenuDay(snapshot.data, true),
-                    ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Center(
-                    child: Text(
-                      "this_week".tr(args: [snapshot.data!.weekName]),
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data!.menuDays.length,
-                    itemBuilder: (context, index) {
-                      MenuDay menuDay = snapshot.data!.menuDays[index];
-                      return DayMenuWidget(menuDay: menuDay);
-                    },
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
+                    );
+                  }
 
-            return const Center(
-              child: SizedBox(
-                width: 80,
-                height: 80,
-                child: CircularProgressIndicator(),
+                  return const Center(
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );

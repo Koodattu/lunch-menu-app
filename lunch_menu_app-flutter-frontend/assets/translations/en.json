@@ -1,6 +1,7 @@
 {
     "lunch_menu_app": "Lunch Menu App",
     "lunch_menu": "Lunch Menu",
+    "error_occurred": "Error occurred: \n\n{}",
     "lunch": "Lunch",
     "menu": "Menu",
     "history": "History",

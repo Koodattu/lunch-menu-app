@@ -90,9 +90,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
-      body: PageStorage(
-        bucket: bucket,
-        child: pages[_selectedIndex],
+      body: SafeArea(
+        child: PageStorage(
+          bucket: bucket,
+          child: pages[_selectedIndex],
+        ),
       ),
     );
   }
