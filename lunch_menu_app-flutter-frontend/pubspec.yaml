@@ -26,6 +26,7 @@ dev_dependencies:
   flutter_launcher_icons: "^0.13.0"
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
+  flutter_oss_licenses: ^2.0.1
 
 flutter_icons:
   android: "launcher_icon"

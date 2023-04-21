@@ -35,5 +35,8 @@
     "open_store_page": "Open the application in Play Store",
     "licenses": "Licenses",
     "show_licenses": "Show third party licenses",
-    "feedback_email_subject": "Feedback: Lunch Menu -Application"
+    "feedback_email_subject": "Feedback: Lunch Menu -Application",
+    "close": "Close",
+    "details": "Details",
+    "license_details": "License details"
 }

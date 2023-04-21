@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lunch_menu_app/oss_licenses.dart';
 import 'package:flutter_lunch_menu_app/pages/views/app_settings_view.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
@@ -23,6 +24,86 @@ class _MorePageState extends State<MorePage> {
   void initState() {
     super.initState();
     getPackageInfo();
+  }
+
+  Future showLicensesDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("licenses").tr(),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: ListView.builder(
+              itemCount: ossLicenses.length * 2,
+              itemBuilder: ((context, i) {
+                if (i.isOdd) {
+                  return const Divider();
+                }
+                int index = i ~/ 2;
+                Package license = ossLicenses[index];
+                return ListTile(
+                  title: Text(license.name),
+                  subtitle: Text(license.version),
+                  trailing: TextButton(
+                    child: const Text("details").tr(),
+                    onPressed: () => showLicenseDetails(license),
+                  ),
+                );
+              }),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("close").tr(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future showLicenseDetails(Package package) async {
+    const double padding = 16;
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("license_details").tr(),
+          content: SizedBox(
+              width: 300,
+              height: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(package.name),
+                    const SizedBox(height: padding),
+                    Text(package.description),
+                    const SizedBox(height: padding),
+                    Text(package.repository.toString()),
+                    const SizedBox(height: padding),
+                    Text(package.authors.join(", ")),
+                    const SizedBox(height: padding),
+                    Text(package.version),
+                    const SizedBox(height: padding),
+                    Text(package.license.toString()),
+                  ],
+                ),
+              )),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("close").tr(),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void getPackageInfo() async {
@@ -149,7 +230,7 @@ class _MorePageState extends State<MorePage> {
                 iconData: Icons.play_arrow,
               ),
               InteractableCard(
-                voidCallback: () => {},
+                voidCallback: showLicensesDialog,
                 title: "licenses".tr(),
                 subTitle: "show_licenses".tr(),
                 iconData: Icons.info,

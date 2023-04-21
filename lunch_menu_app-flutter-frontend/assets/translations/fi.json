@@ -35,5 +35,8 @@
     "open_store_page": "Avaa sovellus Play Storessa",
     "licenses": "Lisenssit",
     "show_licenses": "Näytä kolmannen osapuolen lisenssit",
-    "feedback_email_subject": "Palaute: Lounas Ruokalista -Sovellus"
+    "feedback_email_subject": "Palaute: Lounas Ruokalista -Sovellus",
+    "close": "Sulje",
+    "details": "Tiedot",
+    "license_details": "Lisenssin tiedot"
 }
