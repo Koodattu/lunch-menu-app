@@ -58,43 +58,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedPageIndex = 0;
+  late List<Widget> _pages;
+  late PageController _pageController;
 
-  final List<Widget> pages = [
-    const MenuPage(
-      key: PageStorageKey("MenuPage"),
-    ),
-    const HistoryPage(
-      key: PageStorageKey("HistoryPage"),
-    ),
-    const MorePage(
-      key: PageStorageKey("MorePage"),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
 
-  final PageStorageBucket bucket = PageStorageBucket();
+    _pages = [
+      const MenuPage(),
+      const HistoryPage(),
+      const MorePage(),
+    ];
 
-  Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
-        backgroundColor: Colors.black54,
-        selectedItemColor: Colors.blue,
-        onTap: (int index) => setState(() => _selectedIndex = index),
-        currentIndex: selectedIndex,
+    _pageController = PageController(initialPage: _selectedPageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+
+    super.dispose();
+  }
+
+  final List<Widget> pages = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: _pages,
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: const Icon(Icons.restaurant_menu), label: "menu".tr()),
           BottomNavigationBarItem(icon: const Icon(Icons.history), label: "history".tr()),
           BottomNavigationBarItem(icon: const Icon(Icons.more), label: "more".tr()),
         ],
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
-      body: SafeArea(
-        child: PageStorage(
-          bucket: bucket,
-          child: pages[_selectedIndex],
-        ),
+        backgroundColor: Colors.black54,
+        selectedItemColor: Colors.blue,
+        currentIndex: _selectedPageIndex,
+        onTap: (selectedPageIndex) {
+          setState(() {
+            _selectedPageIndex = selectedPageIndex;
+            _pageController.jumpToPage(selectedPageIndex);
+          });
+        },
       ),
     );
   }
