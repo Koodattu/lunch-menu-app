@@ -18,6 +18,7 @@ dependencies:
   store_redirect: ^2.0.1
   url_launcher: ^6.1.10
   flutter_native_splash: ^2.2.19
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:
