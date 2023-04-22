@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/oss_licenses.dart';
@@ -26,7 +24,7 @@ class _MorePageState extends State<MorePage> {
     getPackageInfo();
   }
 
-  Future showLicensesDialog() async {
+  Future showLicensesDialog() {
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -44,6 +42,7 @@ class _MorePageState extends State<MorePage> {
                 }
                 int index = i ~/ 2;
                 Package license = ossLicenses[index];
+
                 return ListTile(
                   title: Text(license.name),
                   subtitle: Text(license.version),
@@ -68,6 +67,7 @@ class _MorePageState extends State<MorePage> {
 
   Future showLicenseDetails(Package package) async {
     const double padding = 16;
+
     return showDialog(
       context: context,
       barrierDismissible: true,
@@ -75,26 +75,27 @@ class _MorePageState extends State<MorePage> {
         return AlertDialog(
           title: const Text("license_details").tr(),
           content: SizedBox(
-              width: 300,
-              height: 300,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(package.name),
-                    const SizedBox(height: padding),
-                    Text(package.description),
-                    const SizedBox(height: padding),
-                    Text(package.repository.toString()),
-                    const SizedBox(height: padding),
-                    Text(package.authors.join(", ")),
-                    const SizedBox(height: padding),
-                    Text(package.version),
-                    const SizedBox(height: padding),
-                    Text(package.license.toString()),
-                  ],
-                ),
-              )),
+            width: 300,
+            height: 300,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(package.name),
+                  const SizedBox(height: padding),
+                  Text(package.description),
+                  const SizedBox(height: padding),
+                  Text(package.repository.toString()),
+                  const SizedBox(height: padding),
+                  Text(package.authors.join(", ")),
+                  const SizedBox(height: padding),
+                  Text(package.version),
+                  const SizedBox(height: padding),
+                  Text(package.license.toString()),
+                ],
+              ),
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -114,8 +115,10 @@ class _MorePageState extends State<MorePage> {
   }
 
   openFileInCloud() {
-    launchUrlString("https://docs.google.com/document/d/1ejQntnQPCHiajV_CLB6Un9AUElxzyOP4/",
-        mode: LaunchMode.externalApplication);
+    launchUrlString(
+      "https://docs.google.com/document/d/1ejQntnQPCHiajV_CLB6Un9AUElxzyOP4/",
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   sendEmailFeedback() {
@@ -137,7 +140,7 @@ class _MorePageState extends State<MorePage> {
   }
 
   Future openAppSettings(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const AppSettingsView()));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const AppSettingsView()));
   }
 
   @override
@@ -234,9 +237,9 @@ class _MorePageState extends State<MorePage> {
                 title: "licenses".tr(),
                 subTitle: "show_licenses".tr(),
                 iconData: Icons.info,
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

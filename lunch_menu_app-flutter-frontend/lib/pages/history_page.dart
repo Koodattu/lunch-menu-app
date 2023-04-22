@@ -39,6 +39,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: FutureBuilder<List<MenuWeek>>(
@@ -50,6 +51,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 MenuWeek menuWeek = snapshot.data![index];
+
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
@@ -77,6 +79,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
                           itemCount: menuWeek.menuDays.length,
                           itemBuilder: (context, index) {
                             MenuDay menuDay = menuWeek.menuDays[index];
+
                             return Padding(
                               padding: const EdgeInsets.all(4),
                               child: Column(
@@ -91,6 +94,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
                                       itemCount: menuDay.menuCourses.length,
                                       itemBuilder: (context, index) {
                                         MenuCourse menuCourse = menuDay.menuCourses[index];
+
                                         return Text(menuCourse.courseName);
                                       },
                                     ),
@@ -110,7 +114,13 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
             return Text("${snapshot.error}");
           }
 
-          return const CircularProgressIndicator();
+          return const Center(
+            child: SizedBox(
+              width: 64,
+              height: 64,
+              child: CircularProgressIndicator(),
+            ),
+          );
         },
       ),
     );

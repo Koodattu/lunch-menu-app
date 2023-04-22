@@ -91,8 +91,8 @@ class _LanguageToggleCardState extends State<LanguageToggleCard> {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () async {
-          await context.setLocale(Locale(context.locale.toString() == "en" ? "fi" : "en"));
+        onTap: () {
+          context.setLocale(Locale(context.locale.toString() == "en" ? "fi" : "en"));
           WidgetsFlutterBinding.ensureInitialized().performReassemble();
         },
         child: Padding(

@@ -30,7 +30,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
     initWeekMenu();
   }
 
-  initWeekMenu() async {
+  initWeekMenu() {
     getSettings();
     setState(() {
       menuWeek = fetchMenu();
@@ -47,6 +47,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
     final response = await http
         .get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-weeks/latest'))
         .timeout(const Duration(seconds: 10));
+
     return menuWeekFromJson(utf8.decode(response.bodyBytes));
   }
 
@@ -56,12 +57,14 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
     if (menuWeek!.menuDays.length <= dayOfWeek) {
       return null;
     }
+
     return menuWeek.menuDays[dayOfWeek];
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(
         onRefresh: () async {
@@ -131,6 +134,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
                           itemCount: snapshot.data!.menuDays.length,
                           itemBuilder: (context, index) {
                             MenuDay menuDay = snapshot.data!.menuDays[index];
+
                             return DayMenuWidget(menuDay: menuDay);
                           },
                         ),
@@ -180,6 +184,7 @@ class DayMenuTitleWidget extends StatelessWidget {
     if (menuDay == null) {
       return const SizedBox();
     }
+
     return Column(
       children: [
         const SizedBox(
@@ -237,8 +242,12 @@ class DayMenuWidget extends StatelessWidget {
           itemCount: menuDay!.menuCourses.length,
           itemBuilder: (context, index) {
             MenuCourse menuCourse = menuDay!.menuCourses[index];
+
             return CourseCardWidget(
-                courseName: menuCourse.courseName, courseType: menuCourse.courseType, allergens: menuCourse.allergens);
+              courseName: menuCourse.courseName,
+              courseType: menuCourse.courseType,
+              allergens: menuCourse.allergens,
+            );
           },
         ),
       ],
@@ -253,7 +262,7 @@ class CourseCardWidget extends StatelessWidget {
 
   const CourseCardWidget({super.key, required this.courseName, required this.courseType, required this.allergens});
 
-  ImageIcon getMenuTypeIcon(String courseName) {
+  ImageIcon getMenuTypeIcon(String courseType) {
     if (courseType.toLowerCase().contains("salad")) {
       return const ImageIcon(
         AssetImage('assets/icon_salad.png'),
@@ -283,7 +292,7 @@ class CourseCardWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            getMenuTypeIcon(courseName),
+            getMenuTypeIcon(courseType),
             const SizedBox(
               width: 16,
             ),
