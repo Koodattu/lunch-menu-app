@@ -19,6 +19,8 @@ dependencies:
   url_launcher: ^6.1.10
   flutter_native_splash: ^2.2.19
   expandable: ^5.0.1
+  collection: ^1.17.0
+  path_provider: ^2.0.14
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
+import 'package:flutter_lunch_menu_app/services/user_saved_votes_service.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,11 +116,13 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
                           DayMenuTitleWidget(
                             relativeDay: "today".tr(),
                             menuDay: getMenuDay(snapshot.data, false),
+                            showVoteIcons: true,
                           ),
                         if (showTomorrow)
                           DayMenuTitleWidget(
                             relativeDay: "tomorrow".tr(),
                             menuDay: getMenuDay(snapshot.data, true),
+                            showVoteIcons: false,
                           ),
                         const SizedBox(
                           height: 16,
@@ -135,7 +140,10 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
                           itemBuilder: (context, index) {
                             MenuDay menuDay = snapshot.data!.menuDays[index];
 
-                            return DayMenuWidget(menuDay: menuDay);
+                            return DayMenuWidget(
+                              menuDay: menuDay,
+                              showVoteIcons: false,
+                            );
                           },
                         ),
                       ],
@@ -174,10 +182,12 @@ class DayMenuTitleWidget extends StatelessWidget {
     super.key,
     required this.relativeDay,
     required this.menuDay,
+    required this.showVoteIcons,
   });
 
   final String relativeDay;
   final MenuDay? menuDay;
+  final bool showVoteIcons;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +206,10 @@ class DayMenuTitleWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
           ),
         ),
-        DayMenuWidget(menuDay: menuDay),
+        DayMenuWidget(
+          menuDay: menuDay,
+          showVoteIcons: showVoteIcons,
+        ),
       ],
     );
   }
@@ -206,9 +219,11 @@ class DayMenuWidget extends StatelessWidget {
   const DayMenuWidget({
     super.key,
     required this.menuDay,
+    required this.showVoteIcons,
   });
 
   final MenuDay? menuDay;
+  final bool showVoteIcons;
 
   String lengthenDayName(String dayName) {
     List<String> weekDays = ["monday".tr(), "tuesday".tr(), "wednesday".tr(), "thursday".tr(), "friday".tr()];
@@ -232,9 +247,12 @@ class DayMenuWidget extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Text(
-          lengthenDayName(menuDay!.dayName),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        Padding(
+          padding: const EdgeInsets.all(6),
+          child: Text(
+            lengthenDayName(menuDay!.dayName),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
         ),
         ListView.builder(
           shrinkWrap: true,
@@ -244,9 +262,8 @@ class DayMenuWidget extends StatelessWidget {
             MenuCourse menuCourse = menuDay!.menuCourses[index];
 
             return CourseCardWidget(
-              courseName: menuCourse.courseName,
-              courseType: menuCourse.courseType,
-              allergens: menuCourse.allergens,
+              menuCourse: menuCourse,
+              showVoteIcons: showVoteIcons,
             );
           },
         ),
@@ -256,11 +273,14 @@ class DayMenuWidget extends StatelessWidget {
 }
 
 class CourseCardWidget extends StatelessWidget {
-  final String courseName;
-  final String courseType;
-  final List<Allergen> allergens;
+  final MenuCourse menuCourse;
+  final bool showVoteIcons;
 
-  const CourseCardWidget({super.key, required this.courseName, required this.courseType, required this.allergens});
+  const CourseCardWidget({
+    super.key,
+    required this.menuCourse,
+    required this.showVoteIcons,
+  });
 
   ImageIcon getMenuTypeIcon(String courseType) {
     if (courseType.toLowerCase().contains("salad")) {
@@ -286,77 +306,173 @@ class CourseCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            getMenuTypeIcon(courseType),
-            const SizedBox(
-              width: 16,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  courseName,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (allergens.any((i) => i.allergenSymbol == "L"))
-                      Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            color: Colors.blue,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(2),
-                            child: ImageIcon(
-                              AssetImage(
-                                'assets/icon_lactose_free.png',
+    return SizedBox(
+      height: showVoteIcons ? 100 : 80,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  getMenuTypeIcon(menuCourse.courseType),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        menuCourse.courseName,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (menuCourse.allergens.any((i) => i.allergenSymbol == "L"))
+                            Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                  color: Colors.blue,
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: ImageIcon(
+                                    AssetImage(
+                                      'assets/icon_lactose_free.png',
+                                    ),
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
                               ),
-                              color: Colors.white,
-                              size: 24,
                             ),
-                          ),
-                        ),
-                      ),
-                    if (allergens.any((i) => i.allergenSymbol == "G"))
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                          color: Colors.orange,
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(2),
-                          child: ImageIcon(
-                            AssetImage(
-                              'assets/icon_gluten_free.png',
+                          if (menuCourse.allergens.any((i) => i.allergenSymbol == "G"))
+                            Container(
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                color: Colors.orange,
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(2),
+                                child: ImageIcon(
+                                  AssetImage(
+                                    'assets/icon_gluten_free.png',
+                                  ),
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
                             ),
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
+                        ],
                       ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+              if (showVoteIcons) VoteIcons(menuCourseId: menuCourse.id),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class VoteIcons extends StatefulWidget {
+  const VoteIcons({
+    super.key,
+    required this.menuCourseId,
+  });
+
+  final int menuCourseId;
+
+  @override
+  State<VoteIcons> createState() => _VoteIconsState();
+}
+
+class _VoteIconsState extends State<VoteIcons> {
+  UserSavedVotesService savedVotesService = UserSavedVotesService();
+  late UserSavedVote savedVote;
+
+  bool liked = false;
+  bool disliked = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    readSavedVotes();
+  }
+
+  void readSavedVotes() async {
+    savedVote = await savedVotesService.readFromFile(widget.menuCourseId);
+
+    setState(() {
+      liked = savedVote.liked;
+      disliked = savedVote.disliked;
+    });
+  }
+
+  void voteButtonPressed(bool votedLike) async {
+    bool oldLikeState = liked;
+    bool oldDislikeState = disliked;
+
+    bool newLikeState = liked && votedLike ? !votedLike : votedLike;
+    bool newDislikeState = disliked && !votedLike ? votedLike : !votedLike;
+
+    savedVote.liked = newLikeState;
+    savedVote.disliked = newDislikeState;
+    await savedVotesService.writeToFile(savedVote);
+
+    setState(() {
+      liked = newLikeState;
+      disliked = newDislikeState;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 36,
+          height: 36,
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => voteButtonPressed(true),
+            icon: Icon(
+              liked ? Icons.thumb_up : Icons.thumb_up_outlined,
+              color: Colors.green,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 36,
+          height: 36,
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => voteButtonPressed(false),
+            icon: Icon(
+              disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+              color: Colors.red,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
