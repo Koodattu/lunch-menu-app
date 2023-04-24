@@ -1,5 +1,7 @@
 package fi.koodattu.lunchmenuapp.controller;
 
+import fi.koodattu.lunchmenuapp.model.LunchMenuCourse;
+import fi.koodattu.lunchmenuapp.model.LunchMenuCourseVote;
 import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
 import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
 import fi.koodattu.lunchmenuapp.service.LunchMenuService;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +22,7 @@ public class LunchMenuController {
     LunchMenuService lunchMenuService;
 
     @GetMapping("/lunch-menu-weeks")
-    public ResponseEntity<Object> getAllLunchMenuWeeks() {
+    public ResponseEntity<List<LunchMenuWeek>> getAllLunchMenuWeeks() {
         try {
             List<LunchMenuWeek> lunchMenuWeeks = lunchMenuService.getAllWeeks();
 
@@ -29,7 +32,7 @@ public class LunchMenuController {
 
             return new ResponseEntity<>(lunchMenuWeeks, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,6 +55,47 @@ public class LunchMenuController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(lunchMenuWeek, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/lunch-menu-courses")
+    public ResponseEntity<List<LunchMenuCourse>> getAllLunchMenuCourses() {
+        try {
+            List<LunchMenuCourse> courses = lunchMenuService.getAllCourses();
+
+            if (courses.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/lunch-menu-course-votes")
+    public ResponseEntity<List<LunchMenuCourseVote>> getAllLunchMenuCourseVotes() {
+        try {
+            List<LunchMenuCourseVote> courseVotes = lunchMenuService.getAllVotes();
+
+            if (courseVotes.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(courseVotes, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/lunch-menu-course-votes/vote")
+    public ResponseEntity<?> postLunchMenuCourseVote(@RequestBody LunchMenuCourseVote courseVote) {
+        LunchMenuCourseVote vote =  lunchMenuService.saveVote(courseVote);
+
+        if (vote == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 

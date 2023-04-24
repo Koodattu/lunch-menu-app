@@ -3,6 +3,7 @@ package fi.koodattu.lunchmenuapp.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.List;
 public class LunchMenuWeek {
 
     @Id
-    @GeneratedValue
+    @Column(name = "week_id")
     private long id;
 
     @Column(name = "name")
@@ -25,6 +26,9 @@ public class LunchMenuWeek {
 
     @Column(name = "main_price")
     private String mainCoursePrice;
+
+    @Column(name = "doc_save_date")
+    private Date documentSaveDate;
 
     @OneToMany
     private List<LunchMenuDay> menuDays;

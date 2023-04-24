@@ -1,5 +1,6 @@
 package fi.koodattu.lunchmenuapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class LunchMenuCourse {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
@@ -22,4 +23,9 @@ public class LunchMenuCourse {
 
     @ManyToMany
     private List<LunchMenuAllergen> allergens;
+
+    @OneToOne(mappedBy = "course", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    @JsonManagedReference
+    private LunchMenuCourseVote courseVote;
 }

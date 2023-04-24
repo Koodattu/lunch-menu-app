@@ -7,18 +7,25 @@ import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
 import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
 import fi.koodattu.lunchmenuapp.service.LunchMenuService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ooxml.POIXMLDocument;
+import org.apache.poi.ooxml.POIXMLProperties;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.xmlbeans.XmlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedInputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -37,10 +44,18 @@ public class ScheduledTasks {
             URLConnection urlConnection = url.openConnection();
             BufferedInputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
             XWPFDocument xwpfDocument = new XWPFDocument(inputStream);
-            //HWPFDocument hwpfDocument = new HWPFDocument(inputStream);
-            String documentText = new XWPFWordExtractor(xwpfDocument).getText();
-            LunchMenuWeek lunchMenuWeek = ParseLunchMenuWeekFromDocument(documentText);
-            lunchMenuService.saveLunchMenuWeek(lunchMenuWeek);
+            LunchMenuWeek lunchMenuWeek = ParseLunchMenuWeekFromDocument(xwpfDocument);
+
+            // check if missing or changed from database
+            if (NeedsToSaveDocumentInDatabase(lunchMenuWeek)){
+                lunchMenuService.saveLunchMenuWeek(lunchMenuWeek);
+            }
+
+            // save file if not saved
+            if (NeedsToSaveDocumentInFolder(lunchMenuWeek)){
+                SaveDocumentFile(xwpfDocument, lunchMenuWeek);
+            }
+
             log.info("[INFO] Saved new lunch menu week to database.");
         }
         catch (Exception ex){
@@ -50,9 +65,80 @@ public class ScheduledTasks {
         log.info("[INFO] Done fetching menu from drive.");
     }
 
-    private LunchMenuWeek ParseLunchMenuWeekFromDocument(String documentText) {
+    private boolean NeedsToSaveDocumentInDatabase(LunchMenuWeek lunchMenuWeek){
+        Optional<LunchMenuWeek> savedWeek = lunchMenuService.getWeekById(lunchMenuWeek.getId());
+
+        if (savedWeek.isEmpty()){
+            return true;
+        }
+
+        Date docSavedDate = lunchMenuWeek.getDocumentSaveDate();
+        Date dbSavedDate = savedWeek.get().getDocumentSaveDate();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        return dateFormat.format(docSavedDate).equals(dateFormat.format(dbSavedDate));
+    }
+
+    private long GenerateWeekId(String weekName, String year){
+        String week = weekName.split("(?=\\d*$)", 2)[1];
+        return Long.parseLong(year + week);
+    }
+
+    private boolean NeedsToSaveDocumentInFolder(LunchMenuWeek lunchMenuWeek) throws IOException {
+        String documentsFolderPath = "./menu_doc_files/";
+        String documentFilePath = documentsFolderPath + lunchMenuWeek.getWeekName() + "-" + Year.now() + ".doc";
+        File file = new File(documentFilePath);
+
+        if (!file.isFile()){
+            return true;
+        }
+
+        XWPFDocument savedDocument = new XWPFDocument(new FileInputStream(file));
+        POIXMLProperties.CoreProperties properties = savedDocument.getProperties().getCoreProperties();
+
+        Date docSavedDate = lunchMenuWeek.getDocumentSaveDate();
+        Date folderSavedDate = properties.getModified() != null ? properties.getModified() : properties.getCreated();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        return dateFormat.format(docSavedDate).equals(dateFormat.format(folderSavedDate));
+    }
+
+    private void SaveDocumentFile(XWPFDocument document, LunchMenuWeek lunchMenuWeek) throws IOException {
+        String documentsFolderPath = "./menu_doc_files/";
+        String documentFilePath = documentsFolderPath + lunchMenuWeek.getWeekName() + "-" + Year.now();
+
+        Path folderPath = Path.of(documentsFolderPath);
+
+        if (!Files.isDirectory(folderPath)){
+            Files.createDirectory(folderPath);
+        }
+
+        FileOutputStream fileOutputStream = new FileOutputStream(documentFilePath + ".doc");
+        document.write(fileOutputStream);
+        fileOutputStream.close();
+    }
+
+    private LunchMenuWeek ParseLunchMenuWeekFromDocument(XWPFDocument document){
+        POIXMLProperties properties = document.getProperties();
+        Date created = properties.getCoreProperties().getCreated();
+        Date lastSaved = properties.getCoreProperties().getModified();
+        String documentText = new XWPFWordExtractor(document).getText();
+
+        if (lastSaved == null) {
+            lastSaved = created;
+            if (created == null){
+                lastSaved = Calendar.getInstance().getTime();
+            }
+        }
+
+        return ParseLunchMenuWeekFromText(documentText, lastSaved);
+    }
+
+    private LunchMenuWeek ParseLunchMenuWeekFromText(String documentText, Date lastSaved) {
         LunchMenuWeek week = new LunchMenuWeek();
         List<LunchMenuDay> days = new ArrayList<>();
+
+        week.setDocumentSaveDate(lastSaved);
 
         documentText = documentText.trim().replaceAll("\r+", "\t").replaceAll(" +", " ").replaceAll("\t{2,}|\t+ +\t+", "\t").replaceAll("\n", "\t").replaceAll("\n\n", "\t").replaceAll("\n\n\n", "\t");
         String[] splits = documentText.split("\t");
@@ -73,6 +159,7 @@ public class ScheduledTasks {
         String title = splitsList.get(6);
 
         week.setWeekName(title);
+        week.setId(GenerateWeekId(title, getYearFromDate(lastSaved)));
 
         week.setSaladCoursePrice(saladPrice.split(" ", 2)[1]);
         week.setSoupCoursePrice(soupPrice.split(" ", 2)[1]);
@@ -243,5 +330,11 @@ public class ScheduledTasks {
         week.setMenuDays(days);
 
         return week;
+    }
+
+    private String getYearFromDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return String.valueOf(calendar.get(Calendar.YEAR));
     }
 }

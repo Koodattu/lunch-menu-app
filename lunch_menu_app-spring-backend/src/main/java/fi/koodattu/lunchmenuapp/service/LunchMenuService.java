@@ -1,16 +1,9 @@
 package fi.koodattu.lunchmenuapp.service;
 
-import fi.koodattu.lunchmenuapp.model.LunchMenuAllergen;
-import fi.koodattu.lunchmenuapp.model.LunchMenuCourse;
-import fi.koodattu.lunchmenuapp.model.LunchMenuDay;
-import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
-import fi.koodattu.lunchmenuapp.repository.LunchMenuAllergenRepository;
-import fi.koodattu.lunchmenuapp.repository.LunchMenuCourseRepository;
-import fi.koodattu.lunchmenuapp.repository.LunchMenuDayRepository;
-import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
+import fi.koodattu.lunchmenuapp.model.*;
+import fi.koodattu.lunchmenuapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +12,15 @@ import java.util.Optional;
 public class LunchMenuService {
 
     @Autowired
-    LunchMenuWeekRepository lunchMenuWeekRepository;
+    LunchMenuWeekRepository menuWeekRepository;
     @Autowired
-    LunchMenuDayRepository lunchMenuDayRepository;
+    LunchMenuDayRepository menuDayRepository;
     @Autowired
-    LunchMenuCourseRepository lunchMenuCourseRepository;
+    LunchMenuCourseRepository menuCourseRepository;
     @Autowired
-    LunchMenuAllergenRepository lunchMenuAllergenRepository;
+    LunchMenuAllergenRepository menuAllergenRepository;
+    @Autowired
+    LunchMenuCourseVoteRepository courseVoteRepository;
 
     public LunchMenuWeek saveLunchMenuWeek(LunchMenuWeek lunchMenuWeek){
 
@@ -33,42 +28,68 @@ public class LunchMenuService {
             for (LunchMenuCourse course : day.getMenuCourses()){
                 for (LunchMenuAllergen allergen : course.getAllergens()){
                     allergen.setId(0);
-                    LunchMenuAllergen dbAllergen = lunchMenuAllergenRepository.findAllergenBySymbol(allergen.getAllergenSymbol());
+                    LunchMenuAllergen dbAllergen = menuAllergenRepository.findAllergenBySymbol(allergen.getAllergenSymbol());
                     if (dbAllergen == null){
-                        allergen.setId(lunchMenuAllergenRepository.save(allergen).getId());
+                        allergen.setId(menuAllergenRepository.save(allergen).getId());
                     } else {
                         allergen.setId(dbAllergen.getId());
                     }
                 }
                 course.setId(0);
-                LunchMenuCourse dbCourse = lunchMenuCourseRepository.findCourseByName(course.getCourseName());
+
+                LunchMenuCourseVote courseVote = new LunchMenuCourseVote();
+                courseVote.setCourse(course);
+                course.setCourseVote(courseVote);
+
+                LunchMenuCourse dbCourse = menuCourseRepository.findCourseByName(course.getCourseName());
                 if (dbCourse == null){
-                    course.setId(lunchMenuCourseRepository.save(course).getId());
+                    course.setId(menuCourseRepository.save(course).getId());
                 } else {
                     course.setId(dbCourse.getId());
                 }
             }
-            lunchMenuDayRepository.save(day);
+            menuDayRepository.save(day);
         }
 
-        return lunchMenuWeekRepository.save(lunchMenuWeek);
+        return menuWeekRepository.save(lunchMenuWeek);
     }
 
     public List<LunchMenuWeek> getAllWeeks(){
-        return lunchMenuWeekRepository.findAll();
+        return menuWeekRepository.findAll();
     }
 
     public Optional<LunchMenuWeek> getWeekById(long id){
-        return lunchMenuWeekRepository.findById(id);
+        return menuWeekRepository.findById(id);
     }
 
     public LunchMenuWeek getLatestWeek(){
-        List<LunchMenuWeek> lunchMenuWeeks = lunchMenuWeekRepository.findAll();
+        List<LunchMenuWeek> lunchMenuWeeks = menuWeekRepository.findAll();
 
         if (lunchMenuWeeks.isEmpty()) {
             return null;
         } else {
             return lunchMenuWeeks.get(lunchMenuWeeks.size() - 1);
         }
+    }
+
+    public List<LunchMenuCourse> getAllCourses(){
+        return menuCourseRepository.findAll();
+    }
+
+    public List<LunchMenuCourseVote> getAllVotes(){
+        return courseVoteRepository.findAll();
+    }
+
+    public LunchMenuCourseVote saveVote(LunchMenuCourseVote vote){
+        Optional<LunchMenuCourseVote> courseVote = courseVoteRepository.findById(vote.getId());
+
+        if (courseVote.isPresent()){
+            courseVote.get().setLikes(courseVote.get().getLikes() + vote.getLikes());
+            courseVote.get().setDislikes(courseVote.get().getDislikes() + vote.getDislikes());
+
+            return courseVoteRepository.save(vote);
+        }
+
+        return null;
     }
 }
