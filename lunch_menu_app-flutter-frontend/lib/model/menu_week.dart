@@ -11,6 +11,13 @@ String menuWeekListToJson(List<MenuWeek> data) => json.encode(List<dynamic>.from
 MenuWeek menuWeekFromJson(String str) => MenuWeek.fromJson(json.decode(str));
 String menuWeekToJson(MenuWeek data) => json.encode(data.toJson());
 
+CourseVote CourseVoteFromJson(String str) => CourseVote.fromJson(json.decode(str));
+String CourseVoteToJson(CourseVote data) => json.encode(data.toJson());
+
+List<MenuCourse> menuCourseListFromJson(String str) =>
+    List<MenuCourse>.from(json.decode(str).map((x) => MenuCourse.fromJson(x)));
+String menuCourseListToJson(List<MenuCourse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class MenuWeek {
   MenuWeek({
     required this.id,
@@ -18,6 +25,7 @@ class MenuWeek {
     required this.saladCoursePrice,
     required this.soupCoursePrice,
     required this.mainCoursePrice,
+    required this.documentSaveDate,
     required this.menuDays,
   });
 
@@ -26,6 +34,7 @@ class MenuWeek {
   final String saladCoursePrice;
   final String soupCoursePrice;
   final String mainCoursePrice;
+  final DateTime documentSaveDate;
   final List<MenuDay> menuDays;
 
   factory MenuWeek.fromJson(Map<String, dynamic> json) => MenuWeek(
@@ -34,6 +43,7 @@ class MenuWeek {
         saladCoursePrice: json["saladCoursePrice"],
         soupCoursePrice: json["soupCoursePrice"],
         mainCoursePrice: json["mainCoursePrice"],
+        documentSaveDate: DateTime.parse(json["documentSaveDate"]),
         menuDays: List<MenuDay>.from(json["menuDays"].map((x) => MenuDay.fromJson(x))),
       );
 
@@ -43,6 +53,7 @@ class MenuWeek {
         "saladCoursePrice": saladCoursePrice,
         "soupCoursePrice": soupCoursePrice,
         "mainCoursePrice": mainCoursePrice,
+        "documentSaveDate": documentSaveDate.toIso8601String(),
         "menuDays": List<dynamic>.from(menuDays.map((x) => x.toJson())),
       };
 }
@@ -77,18 +88,21 @@ class MenuCourse {
     required this.courseName,
     required this.courseType,
     required this.allergens,
+    required this.courseVote,
   });
 
   final int id;
   final String courseName;
   final String courseType;
   final List<Allergen> allergens;
+  final CourseVote courseVote;
 
   factory MenuCourse.fromJson(Map<String, dynamic> json) => MenuCourse(
         id: json["id"],
         courseName: json["courseName"],
         courseType: json["courseType"],
         allergens: List<Allergen>.from(json["allergens"].map((x) => Allergen.fromJson(x))),
+        courseVote: CourseVote.fromJson(json["courseVote"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,6 +110,7 @@ class MenuCourse {
         "courseName": courseName,
         "courseType": courseType,
         "allergens": List<dynamic>.from(allergens.map((x) => x.toJson())),
+        "courseVote": courseVote.toJson(),
       };
 }
 
@@ -116,5 +131,29 @@ class Allergen {
   Map<String, dynamic> toJson() => {
         "id": id,
         "allergenSymbol": allergenSymbol,
+      };
+}
+
+class CourseVote {
+  CourseVote({
+    required this.id,
+    required this.likes,
+    required this.dislikes,
+  });
+
+  final int id;
+  final int likes;
+  final int dislikes;
+
+  factory CourseVote.fromJson(Map<String, dynamic> json) => CourseVote(
+        id: json["id"],
+        likes: json["likes"],
+        dislikes: json["dislikes"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "likes": likes,
+        "dislikes": dislikes,
       };
 }

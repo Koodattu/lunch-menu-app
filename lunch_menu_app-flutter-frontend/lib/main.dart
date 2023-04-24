@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/pages/history_page.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
 import 'package:flutter_lunch_menu_app/pages/more_page.dart';
+import 'package:flutter_lunch_menu_app/pages/vote_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +69,7 @@ class _HomePageState extends State<HomePage> {
 
     _pages = [
       const MenuPage(),
+      const VotePage(),
       const HistoryPage(),
       const MorePage(),
     ];
@@ -97,11 +99,13 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: const Icon(Icons.restaurant_menu), label: "menu".tr()),
+          BottomNavigationBarItem(icon: const Icon(Icons.how_to_vote), label: "vote".tr()),
           BottomNavigationBarItem(icon: const Icon(Icons.history), label: "history".tr()),
           BottomNavigationBarItem(icon: const Icon(Icons.more), label: "more".tr()),
         ],
         backgroundColor: Colors.black54,
         selectedItemColor: Colors.blue,
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedPageIndex,
         onTap: (selectedPageIndex) {
           setState(() {

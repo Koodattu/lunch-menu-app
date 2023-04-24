@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
@@ -436,6 +437,36 @@ class _VoteIconsState extends State<VoteIcons> {
     savedVote.liked = newLikeState;
     savedVote.disliked = newDislikeState;
     await savedVotesService.writeToFile(savedVote);
+
+    int likes = 0;
+    int dislikes = 0;
+
+    if (newLikeState && !oldLikeState) {
+      likes++;
+      if (!newDislikeState && oldDislikeState) {
+        dislikes--;
+      }
+    } else if (!newLikeState && oldLikeState && !newDislikeState && !oldDislikeState) {
+      likes--;
+    }
+
+    if (newDislikeState && !oldDislikeState) {
+      dislikes++;
+      if (!newLikeState && oldLikeState) {
+        likes--;
+      }
+    } else if (!newDislikeState && oldDislikeState && !newLikeState && !oldLikeState) {
+      dislikes--;
+    }
+
+    CourseVote courseVote = CourseVote(id: widget.menuCourseId, likes: likes, dislikes: dislikes);
+    final response = http.post(
+      Uri.parse("http://10.0.2.2:8888/api/v1/lunch-menu-course-votes/vote"),
+      body: CourseVoteToJson(courseVote),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      },
+    );
 
     setState(() {
       liked = newLikeState;
