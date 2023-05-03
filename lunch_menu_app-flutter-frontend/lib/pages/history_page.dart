@@ -76,55 +76,60 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
                                   ),
                                 ),
                                 collapsed: const SizedBox(),
-                                expanded: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text("Salad: ${menuWeek.saladCoursePrice}"),
-                                            Text("Soup: ${menuWeek.soupCoursePrice}"),
-                                            Text("Main: ${menuWeek.mainCoursePrice}"),
-                                          ],
-                                        ),
-                                      ),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: menuWeek.menuDays.length,
-                                        itemBuilder: (context, index) {
-                                          MenuDay menuDay = menuWeek.menuDays[index];
-
-                                          return Padding(
-                                            padding: const EdgeInsets.all(4),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                expanded: Column(
+                                  children: [
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                Text(menuDay.dayName),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(4),
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics: const NeverScrollableScrollPhysics(),
-                                                    itemCount: menuDay.menuCourses.length,
-                                                    itemBuilder: (context, index) {
-                                                      MenuCourse menuCourse = menuDay.menuCourses[index];
-
-                                                      return Text(menuCourse.courseName);
-                                                    },
-                                                  ),
-                                                ),
+                                                Text("Salad: ${menuWeek.saladCoursePrice}"),
+                                                Text("Soup: ${menuWeek.soupCoursePrice}"),
+                                                Text("Main: ${menuWeek.mainCoursePrice}"),
                                               ],
                                             ),
-                                          );
-                                        },
+                                          ),
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: menuWeek.menuDays.length,
+                                            itemBuilder: (context, index) {
+                                              MenuDay menuDay = menuWeek.menuDays[index];
+
+                                              return Padding(
+                                                padding: const EdgeInsets.all(4),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(menuDay.dayName),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics: const NeverScrollableScrollPhysics(),
+                                                        itemCount: menuDay.menuCourses.length,
+                                                        itemBuilder: (context, index) {
+                                                          MenuCourse menuCourse = menuDay.menuCourses[index];
+
+                                                          return Text(menuCourse.courseName);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             );

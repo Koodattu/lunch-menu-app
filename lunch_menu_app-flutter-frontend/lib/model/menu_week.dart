@@ -145,6 +145,23 @@ class CourseVote {
   final int likes;
   final int dislikes;
 
+  double calculateLikeDislikeRatio() {
+    if (likes < 0 || dislikes < 0) {
+      return -1;
+    }
+    if (likes == 0 && dislikes == 0) {
+      return -1;
+    }
+    if (likes == 0 && dislikes > 0) {
+      return 0;
+    }
+    if (likes > 0 && dislikes == 0) {
+      return 1;
+    }
+
+    return likes / (likes + dislikes);
+  }
+
   factory CourseVote.fromJson(Map<String, dynamic> json) => CourseVote(
         id: json["id"],
         likes: json["likes"],

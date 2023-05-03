@@ -39,5 +39,7 @@
     "feedback_email_subject": "Palaute: Lounas Ruokalista -Sovellus",
     "close": "Sulje",
     "details": "Tiedot",
-    "license_details": "Lisenssin tiedot"
+    "license_details": "Lisenssin tiedot",
+    "most_liked_courses": "Tykätyimmät ruokalajit",
+    "show_all": "Näytä kaikki"
 }

@@ -91,7 +91,7 @@ public class LunchMenuController {
     @PostMapping("/lunch-menu-course-votes/vote")
     public ResponseEntity<?> postLunchMenuCourseVote(@RequestBody LunchMenuCourseVote courseVote) {
 
-        LunchMenuCourseVote vote =  lunchMenuService.saveVote(courseVote);
+        LunchMenuCourseVote vote = lunchMenuService.saveVote(courseVote);
 
         if (vote == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -87,7 +87,7 @@ public class LunchMenuService {
             courseVote.get().setLikes(courseVote.get().getLikes() + vote.getLikes());
             courseVote.get().setDislikes(courseVote.get().getDislikes() + vote.getDislikes());
 
-            return courseVoteRepository.save(vote);
+            return courseVoteRepository.save(courseVote.get());
         }
 
         return null;

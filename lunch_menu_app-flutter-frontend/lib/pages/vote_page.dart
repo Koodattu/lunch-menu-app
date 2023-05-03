@@ -35,7 +35,63 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
         .get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-courses'))
         .timeout(const Duration(seconds: 10));
 
-    return menuCourseListFromJson(utf8.decode(response.bodyBytes));
+    List<MenuCourse> unsortedCourses = menuCourseListFromJson(utf8.decode(response.bodyBytes));
+    unsortedCourses.sort(sortByLikeDislikeRatio);
+    unsortedCourses = unsortedCourses.reversed.toList();
+
+    return unsortedCourses;
+  }
+
+  int sortByLikeDislikeRatio(MenuCourse a, MenuCourse b) {
+    final ratioA = a.courseVote.calculateLikeDislikeRatio();
+    final ratioB = b.courseVote.calculateLikeDislikeRatio();
+
+    final likesA = a.courseVote.likes;
+    final likesB = b.courseVote.likes;
+
+    final votesA = likesA + a.courseVote.dislikes;
+    final votesB = likesB + b.courseVote.dislikes;
+
+    if (ratioA == ratioB) {
+      if (likesA == likesB) {
+        if (votesA < votesB) {
+          return -1;
+        } else if (votesA > votesB) {
+          return 1;
+        }
+      }
+
+      if (likesA < likesB) {
+        return -1;
+      } else if (likesA > likesB) {
+        return 1;
+      }
+    }
+
+    if (ratioA < ratioB) {
+      return -1;
+    } else if (ratioA > ratioB) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  ImageIcon getRankIcon(int rank) {
+    if (rank >= 0 && rank <= 2) {
+      final colors = [Colors.yellow, Colors.grey, Colors.brown];
+
+      return ImageIcon(
+        AssetImage("assets/icon_trophy_$rank.png"),
+        size: 50,
+        color: colors[rank],
+      );
+    }
+
+    return const ImageIcon(
+      AssetImage("assets/icon_dinner.png"),
+      size: 24,
+    );
   }
 
   @override
@@ -59,51 +115,85 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                   if (snapshot.hasData) {
                     return Column(
                       children: [
-                        const Text(
-                          "most_liked_courses",
-                          style: TextStyle(fontSize: 18),
-                        ).tr(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Text(
+                            "most_liked_courses",
+                            style: TextStyle(fontSize: 20),
+                          ).tr(),
+                        ),
                         Card(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: 3,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              MenuCourse menuCourse = snapshot.data![index];
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: 6,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    MenuCourse menuCourse = snapshot.data![index];
 
-                              return Row(
-                                children: [
-                                  const Icon(Icons.abc),
-                                  Flexible(
-                                    child: Column(
-                                      children: [
-                                        Text(menuCourse.courseName),
-                                        Padding(
-                                          padding: const EdgeInsets.all(4),
-                                          child: Row(
-                                            children: [
-                                              const Icon(Icons.thumb_up, color: Colors.green),
-                                              Text(menuCourse.courseVote.likes.toString()),
-                                              const Expanded(
-                                                child: LinearProgressIndicator(
-                                                  minHeight: 6,
-                                                  backgroundColor: Colors.red,
-                                                  color: Colors.green,
-                                                  value: 0.5,
+                                    if (index.isOdd) {
+                                      return const Divider();
+                                    }
+
+                                    index = index ~/ 2;
+
+                                    return Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: Row(
+                                        children: [
+                                          getRankIcon(index),
+                                          Flexible(
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  menuCourse.courseName,
+                                                  style: const TextStyle(fontSize: 16),
                                                 ),
-                                              ),
-                                              Text(menuCourse.courseVote.dislikes.toString()),
-                                              const Icon(Icons.thumb_down, color: Colors.red),
-                                            ],
+                                                Padding(
+                                                  padding: const EdgeInsets.all(4),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(Icons.thumb_up, color: Colors.green),
+                                                      Text(menuCourse.courseVote.likes.toString()),
+                                                      Expanded(
+                                                        child: LinearProgressIndicator(
+                                                          minHeight: 6,
+                                                          backgroundColor: Colors.red,
+                                                          color: Colors.green,
+                                                          value: menuCourse.courseVote.calculateLikeDislikeRatio(),
+                                                        ),
+                                                      ),
+                                                      Text(menuCourse.courseVote.dislikes.toString()),
+                                                      const Icon(Icons.thumb_down, color: Colors.red),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      child: const Text("show_all").tr(),
                                     ),
-                                  ),
-                                  const Divider(),
-                                ],
-                              );
-                            },
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      child: const Text("vote").tr(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

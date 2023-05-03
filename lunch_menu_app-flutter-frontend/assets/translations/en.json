@@ -39,5 +39,7 @@
     "feedback_email_subject": "Feedback: Lunch Menu -Application",
     "close": "Close",
     "details": "Details",
-    "license_details": "License details"
+    "license_details": "License details",
+    "most_liked_courses": "Most liked courses",
+    "show_all": "Show all"
 }
