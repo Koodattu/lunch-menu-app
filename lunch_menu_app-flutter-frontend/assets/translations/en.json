@@ -41,5 +41,9 @@
     "details": "Details",
     "license_details": "License details",
     "most_liked_courses": "Most liked courses",
-    "show_all": "Show all"
+    "show_all": "Show all",
+    "what_do_you_think_of": "What do you think of",
+    "left_to_vote_on": "You still have {} courses left to vote on",
+    "change_votes": "Change votes",
+    "course_name": "Course name"
 }

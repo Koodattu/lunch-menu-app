@@ -41,5 +41,9 @@
     "details": "Tiedot",
     "license_details": "Lisenssin tiedot",
     "most_liked_courses": "Tykätyimmät ruokalajit",
-    "show_all": "Näytä kaikki"
+    "show_all": "Näytä kaikki",
+    "what_do_you_think_of": "Mitä mieltä olet tästä",
+    "left_to_vote_on": "Sinulla on vielä {} ruokalajia äänestämättä",
+    "change_votes": "Muuta ääniä",
+    "course_name": "Ruokalajin nimi"
 }
