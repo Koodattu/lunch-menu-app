@@ -45,5 +45,8 @@
     "what_do_you_think_of": "Mitä mieltä olet tästä",
     "left_to_vote_on": "Sinulla on vielä {} ruokalajia äänestämättä",
     "change_votes": "Muuta ääniä",
-    "course_name": "Ruokalajin nimi"
+    "course_name": "Ruokalajin nimi",
+    "vote_error": "Äänestäminen epäonnistui",
+    "vote_succesful": "Kiitos äänestä!",
+    "all_voted": "Olet äänestänyt kaikkiin tämähetkisiin ruokalajeihin. Kiitos äänestämisestä!"
 }

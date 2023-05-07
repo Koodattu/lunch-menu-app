@@ -45,5 +45,8 @@
     "what_do_you_think_of": "What do you think of",
     "left_to_vote_on": "You still have {} courses left to vote on",
     "change_votes": "Change votes",
-    "course_name": "Course name"
+    "course_name": "Course name",
+    "vote_error": "Error saving vote",
+    "vote_succesful": "Thank you for voting!",
+    "all_voted": "You have voted on all courses for now. Thank you for voting!"
 }

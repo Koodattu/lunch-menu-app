@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
-import 'package:flutter_lunch_menu_app/services/user_saved_votes_service.dart';
+import 'package:flutter_lunch_menu_app/services/snackbar_service.dart';
+import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -405,11 +405,8 @@ class VoteIcons extends StatefulWidget {
 }
 
 class _VoteIconsState extends State<VoteIcons> {
-  UserSavedVotesService savedVotesService = UserSavedVotesService();
-  late UserSavedVote savedVote;
-
-  bool liked = false;
-  bool disliked = false;
+  VoteSavingService voteSavingService = VoteSavingService();
+  UserSavedVote savedVote = UserSavedVote(id: 0, liked: false, disliked: false);
 
   @override
   void initState() {
@@ -419,59 +416,21 @@ class _VoteIconsState extends State<VoteIcons> {
   }
 
   void readSavedVotes() async {
-    savedVote = await savedVotesService.readFromFile(widget.menuCourseId);
+    UserSavedVote newSavedVote = await voteSavingService.getVote(widget.menuCourseId);
 
     setState(() {
-      liked = savedVote.liked;
-      disliked = savedVote.disliked;
+      savedVote = newSavedVote;
     });
   }
 
   void voteButtonPressed(bool votedLike) async {
-    bool oldLikeState = liked;
-    bool oldDislikeState = disliked;
+    UserSavedVote newSavedVote = await voteSavingService.saveVote(votedLike, savedVote, widget.menuCourseId);
 
-    bool newLikeState = liked && votedLike ? !votedLike : votedLike;
-    bool newDislikeState = disliked && !votedLike ? votedLike : !votedLike;
-
-    savedVote.liked = newLikeState;
-    savedVote.disliked = newDislikeState;
-    await savedVotesService.writeToFile(savedVote);
-
-    int likes = 0;
-    int dislikes = 0;
-
-    if (newLikeState && !oldLikeState) {
-      likes++;
-      if (!newDislikeState && oldDislikeState) {
-        dislikes--;
-      }
-    } else if (!newLikeState && oldLikeState && !newDislikeState && !oldDislikeState) {
-      likes--;
+    if (newSavedVote != savedVote) {
+      setState(() {
+        savedVote = newSavedVote;
+      });
     }
-
-    if (newDislikeState && !oldDislikeState) {
-      dislikes++;
-      if (!newLikeState && oldLikeState) {
-        likes--;
-      }
-    } else if (!newDislikeState && oldDislikeState && !newLikeState && !oldLikeState) {
-      dislikes--;
-    }
-
-    CourseVote courseVote = CourseVote(id: widget.menuCourseId, likes: likes, dislikes: dislikes);
-    final response = http.post(
-      Uri.parse("http://10.0.2.2:8888/api/v1/lunch-menu-course-votes/vote"),
-      body: CourseVoteToJson(courseVote),
-      headers: {
-        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      },
-    );
-
-    setState(() {
-      liked = newLikeState;
-      disliked = newDislikeState;
-    });
   }
 
   @override
@@ -486,7 +445,7 @@ class _VoteIconsState extends State<VoteIcons> {
             padding: EdgeInsets.zero,
             onPressed: () => voteButtonPressed(true),
             icon: Icon(
-              liked ? Icons.thumb_up : Icons.thumb_up_outlined,
+              savedVote.liked ? Icons.thumb_up : Icons.thumb_up_outlined,
               color: Colors.green,
             ),
           ),
@@ -498,7 +457,7 @@ class _VoteIconsState extends State<VoteIcons> {
             padding: EdgeInsets.zero,
             onPressed: () => voteButtonPressed(false),
             icon: Icon(
-              disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+              savedVote.disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
               color: Colors.red,
             ),
           ),

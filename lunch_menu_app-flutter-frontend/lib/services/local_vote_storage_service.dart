@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:path_provider/path_provider.dart';
 
-class UserSavedVotesService {
+class LocalVoteStorageService {
   Future<String> get _localPath async {
     final Directory directory = await getApplicationDocumentsDirectory();
 
@@ -37,25 +36,6 @@ class UserSavedVotesService {
     } catch (e) {
       return [];
     }
-  }
-
-  Future<UserSavedVote> readFromFile(int id) async {
-    final List<UserSavedVote> saved = await readFile();
-
-    return saved.firstWhereOrNull((element) => element.id == id) ??
-        UserSavedVote(id: id, liked: false, disliked: false);
-  }
-
-  Future<bool> writeToFile(UserSavedVote userSavedVote) async {
-    List<UserSavedVote> saved = await readFile();
-    UserSavedVote? vote = saved.firstWhereOrNull((element) => element.id == userSavedVote.id);
-    if (vote == null) {
-      saved.add(userSavedVote);
-    } else {
-      saved[saved.indexOf(vote)] = userSavedVote;
-    }
-
-    return writeFile(saved);
   }
 
   Future<bool> deleteFile() async {

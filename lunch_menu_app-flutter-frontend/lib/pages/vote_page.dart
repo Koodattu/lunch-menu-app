@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
-import 'package:flutter_lunch_menu_app/services/user_saved_votes_service.dart';
+import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
 import "package:http/http.dart" as http;
 
 class VotePage extends StatefulWidget {
@@ -315,10 +315,10 @@ class VoteOnCourses extends StatefulWidget {
 
 class _VoteOnCoursesState extends State<VoteOnCourses> {
   bool loading = true;
-  UserSavedVotesService savedVotesService = UserSavedVotesService();
+  VoteSavingService voteSavingService = VoteSavingService();
   List<MenuCourse> coursesToVote = [];
   List<UserSavedVote> savedVotes = [];
-  late MenuCourse currentCourse;
+  MenuCourse? currentCourse;
 
   @override
   void initState() {
@@ -327,9 +327,11 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
   }
 
   void readSavedVotes() async {
-    savedVotes = await savedVotesService.readFile();
+    savedVotes = await voteSavingService.getAllVotes();
     coursesToVote = getCoursesWithoutVotes(widget.menuCourses, savedVotes);
-    currentCourse = getRandomCourse(coursesToVote);
+    if (coursesToVote.isNotEmpty) {
+      currentCourse = getRandomCourse(coursesToVote);
+    }
     setState(() {
       loading = false;
     });
@@ -350,23 +352,33 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
 
   MenuCourse getRandomCourse(List<MenuCourse> menuCourses) {
     Random random = Random();
+    MenuCourse randomMenuCourse = menuCourses[random.nextInt(menuCourses.length)];
+    currentCourse ??= randomMenuCourse;
+    while (randomMenuCourse == currentCourse && coursesToVote.length >= 2) {
+      randomMenuCourse = menuCourses[random.nextInt(menuCourses.length)];
+    }
 
-    return menuCourses[random.nextInt(menuCourses.length)];
+    return randomMenuCourse;
   }
 
-  void vote(bool? vote, MenuCourse courseVotedOn) {
+  void vote(bool? vote, MenuCourse courseVotedOn) async {
     bool savingResult = false;
-    if (vote == true) {
-      savingResult = true;
-    } else if (vote == false) {
-      savingResult = true;
+
+    if (vote == true || vote == false) {
+      UserSavedVote savedVote = await voteSavingService.getVote(courseVotedOn.id);
+      UserSavedVote newSavedVote = await voteSavingService.saveVote(vote!, savedVote, courseVotedOn.id);
+      savingResult = savedVote != newSavedVote;
     }
+
     if (savingResult) {
       coursesToVote.remove(courseVotedOn);
     }
+
     if (savingResult || vote == null) {
       setState(() {
-        currentCourse = getRandomCourse(coursesToVote);
+        if (coursesToVote.isNotEmpty) {
+          currentCourse = getRandomCourse(coursesToVote);
+        }
       });
     }
   }
@@ -385,7 +397,32 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
               return const CircularProgressIndicator();
             }
             if (coursesToVote.isEmpty) {
-              return const Text("all_voted").tr();
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: const Text(
+                      "all_voted",
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ).tr(),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllVotedCourses(
+                            votedCourses: widget.menuCourses.where((e) => !coursesToVote.contains(e)).toList(),
+                          ),
+                        ),
+                      ).then((value) => readSavedVotes());
+                    },
+                    child: const Text("change_votes").tr(),
+                  ),
+                ],
+              );
             }
 
             return SizedBox(
@@ -400,7 +437,7 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CourseCardWidget(
-                      menuCourse: currentCourse,
+                      menuCourse: currentCourse!,
                       showVoteIcons: false,
                     ),
                   ),
@@ -408,17 +445,17 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       BigVoteButton(
-                        callback: () => vote(true, currentCourse),
+                        callback: () => vote(true, currentCourse!),
                         color: Colors.green,
                         icon: Icons.thumb_up_outlined,
                       ),
                       BigVoteButton(
-                        callback: () => vote(null, currentCourse),
+                        callback: () => vote(null, currentCourse!),
                         color: Colors.yellow,
                         icon: Icons.skip_next,
                       ),
                       BigVoteButton(
-                        callback: () => vote(false, currentCourse),
+                        callback: () => vote(false, currentCourse!),
                         color: Colors.red,
                         icon: Icons.thumb_down_outlined,
                       ),

@@ -13,10 +13,13 @@ class MorePage extends StatefulWidget {
   State<MorePage> createState() => _MorePageState();
 }
 
-class _MorePageState extends State<MorePage> {
+class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<MorePage> {
   late PackageInfo packageInfo;
 
   bool loaded = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
