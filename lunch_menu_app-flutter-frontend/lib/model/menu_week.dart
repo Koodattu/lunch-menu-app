@@ -11,8 +11,8 @@ String menuWeekListToJson(List<MenuWeek> data) => json.encode(List<dynamic>.from
 MenuWeek menuWeekFromJson(String str) => MenuWeek.fromJson(json.decode(str));
 String menuWeekToJson(MenuWeek data) => json.encode(data.toJson());
 
-CourseVote CourseVoteFromJson(String str) => CourseVote.fromJson(json.decode(str));
-String CourseVoteToJson(CourseVote data) => json.encode(data.toJson());
+CourseVote courseVoteFromJson(String str) => CourseVote.fromJson(json.decode(str));
+String courseVoteToJson(CourseVote data) => json.encode(data.toJson());
 
 List<MenuCourse> menuCourseListFromJson(String str) =>
     List<MenuCourse>.from(json.decode(str).map((x) => MenuCourse.fromJson(x)));

@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
-import 'package:flutter_lunch_menu_app/services/snackbar_service.dart';
+import 'package:flutter_lunch_menu_app/services/menu_backend_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
-import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
@@ -19,6 +15,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<MenuPage> {
+  MenuBackendService menuBackendService = MenuBackendService();
   late SharedPreferences sharedPreferences;
   late Future<MenuWeek> menuWeek;
 
@@ -48,11 +45,9 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
   }
 
   Future<MenuWeek> fetchMenu() async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-weeks/latest'))
-        .timeout(const Duration(seconds: 10));
+    var response = await menuBackendService.getFromApi(RestApiType.latestMenuWeek);
 
-    return menuWeekFromJson(utf8.decode(response.bodyBytes));
+    return response is MenuWeek ? Future.value(response) : Future.error(response);
   }
 
   MenuDay? getMenuDay(MenuWeek? menuWeek, bool tomorrow) {

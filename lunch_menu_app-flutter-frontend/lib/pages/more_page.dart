@@ -33,7 +33,7 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("licenses").tr(),
+          title: const Text("oss_licenses").tr(),
           content: SizedBox(
             width: 300,
             height: 300,

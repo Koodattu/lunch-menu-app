@@ -34,7 +34,7 @@
     "send_feedback": "Anna palautetta sovelluksesta",
     "rate_application": "Arvostele sovellus",
     "open_store_page": "Avaa sovellus Play Storessa",
-    "licenses": "Lisenssit",
+    "oss_licenses": "ALO Lisenssit",
     "show_licenses": "Näytä kolmannen osapuolen lisenssit",
     "feedback_email_subject": "Palaute: Lounas Ruokalista -Sovellus",
     "close": "Sulje",
@@ -48,5 +48,7 @@
     "course_name": "Ruokalajin nimi",
     "vote_error": "Äänestäminen epäonnistui",
     "vote_succesful": "Kiitos äänestä!",
-    "all_voted": "Olet äänestänyt kaikkiin tämähetkisiin ruokalajeihin. Kiitos äänestämisestä!"
+    "all_voted": "Olet äänestänyt kaikkiin tämähetkisiin ruokalajeihin. Kiitos äänestämisestä!",
+    "server_or_internet_down": "Palvelin on alhaalla tai et ole yhteydessä internettiin.",
+    "server_or_internet_slow" : "Palvelin tai internet yhteytesi käy hitaalla."
 }

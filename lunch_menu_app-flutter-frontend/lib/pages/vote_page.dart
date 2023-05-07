@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
+import 'package:flutter_lunch_menu_app/services/menu_backend_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
-import "package:http/http.dart" as http;
 
 class VotePage extends StatefulWidget {
   const VotePage({super.key});
@@ -18,6 +16,7 @@ class VotePage extends StatefulWidget {
 }
 
 class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<VotePage> {
+  MenuBackendService menuBackendService = MenuBackendService();
   late Future<List<MenuCourse>> menuCourses;
 
   @override
@@ -36,15 +35,14 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
   }
 
   Future<List<MenuCourse>> fetchAll() async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:8888/api/v1/lunch-menu-courses'))
-        .timeout(const Duration(seconds: 10));
+    var response = await menuBackendService.getFromApi(RestApiType.allMenuCourses);
 
-    List<MenuCourse> unsortedCourses = menuCourseListFromJson(utf8.decode(response.bodyBytes));
-    unsortedCourses.sort(sortByLikeDislikeRatio);
-    unsortedCourses = unsortedCourses.reversed.toList();
+    if (response is List<MenuCourse>) {
+      response.sort(sortByLikeDislikeRatio);
+      response = response.reversed.toList();
+    }
 
-    return unsortedCourses;
+    return response is List<MenuCourse> ? Future.value(response) : Future.error(response);
   }
 
   int sortByLikeDislikeRatio(MenuCourse a, MenuCourse b) {

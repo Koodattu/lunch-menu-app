@@ -34,7 +34,7 @@
     "send_feedback": "Send feedback about the application",
     "rate_application": "Rate application",
     "open_store_page": "Open the application in Play Store",
-    "licenses": "Licenses",
+    "oss_licenses": "OSS licenses",
     "show_licenses": "Show third party licenses",
     "feedback_email_subject": "Feedback: Lunch Menu -Application",
     "close": "Close",
@@ -48,5 +48,7 @@
     "course_name": "Course name",
     "vote_error": "Error saving vote",
     "vote_succesful": "Thank you for voting!",
-    "all_voted": "You have voted on all courses for now. Thank you for voting!"
+    "all_voted": "You have voted on all courses for now. Thank you for voting!",
+    "server_or_internet_down": "The server is down or you are not connected to internet.",
+    "server_or_internet_slow" : "The server is responding slowly or your internet connection is slow."
 }
