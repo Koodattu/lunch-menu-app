@@ -50,5 +50,7 @@
     "vote_succesful": "Thank you for voting!",
     "all_voted": "You have voted on all courses for now. Thank you for voting!",
     "server_or_internet_down": "The server is down or you are not connected to internet.",
-    "server_or_internet_slow" : "The server is responding slowly or your internet connection is slow."
+    "server_or_internet_slow" : "The server is responding slowly or your internet connection is slow.",
+    "testing": "Testing",
+    "use_mock_data": "Use offline mock data"
 }

@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
-import 'package:flutter_lunch_menu_app/services/menu_backend_service.dart';
+import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<MenuPage> {
-  MenuBackendService menuBackendService = MenuBackendService();
+  NetworkingService networkingService = NetworkingService();
   late SharedPreferences sharedPreferences;
   late Future<MenuWeek> menuWeek;
 
@@ -45,7 +45,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
   }
 
   Future<MenuWeek> fetchMenu() async {
-    var response = await menuBackendService.getFromApi(RestApiType.latestMenuWeek);
+    var response = await networkingService.getFromApi(RestApiType.latestMenuWeek);
 
     return response is MenuWeek ? Future.value(response) : Future.error(response);
   }

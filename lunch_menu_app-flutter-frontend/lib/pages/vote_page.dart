@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
-import 'package:flutter_lunch_menu_app/services/menu_backend_service.dart';
+import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
 
 class VotePage extends StatefulWidget {
@@ -16,7 +16,7 @@ class VotePage extends StatefulWidget {
 }
 
 class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<VotePage> {
-  MenuBackendService menuBackendService = MenuBackendService();
+  NetworkingService networkingService = NetworkingService();
   late Future<List<MenuCourse>> menuCourses;
 
   @override
@@ -35,7 +35,7 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
   }
 
   Future<List<MenuCourse>> fetchAll() async {
-    var response = await menuBackendService.getFromApi(RestApiType.allMenuCourses);
+    var response = await networkingService.getFromApi(RestApiType.allMenuCourses);
 
     if (response is List<MenuCourse>) {
       response.sort(sortByLikeDislikeRatio);

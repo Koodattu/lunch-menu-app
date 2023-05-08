@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
-import 'package:flutter_lunch_menu_app/services/menu_backend_service.dart';
+import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 
@@ -12,7 +12,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClientMixin<HistoryPage> {
-  MenuBackendService menuBackendService = MenuBackendService();
+  NetworkingService networkingService = NetworkingService();
   late Future<List<MenuWeek>> menuWeeks;
 
   @override
@@ -31,7 +31,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
   }
 
   Future<List<MenuWeek>> fetchAll() async {
-    var response = await menuBackendService.getFromApi(RestApiType.allMenuWeeks);
+    var response = await networkingService.getFromApi(RestApiType.allMenuWeeks);
 
     return response is List<MenuWeek> ? Future.value(response) : Future.error(response);
   }

@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/
     - assets/translations/
+    - assets/mock_data/
 
 flutter_native_splash:
   image: assets/app_icon.png

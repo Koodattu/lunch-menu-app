@@ -1,0 +1,252 @@
+{
+    "id": 202215,
+    "weekName": "RUOKALISTA VKO 15",
+    "saladCoursePrice": "4,70 €",
+    "soupCoursePrice": "6,00 €",
+    "mainCoursePrice": "7,00 €",
+    "documentSaveDate": "2022-01-09T11:40:00.000+00:00",
+    "menuDays": [
+        {
+            "id": 702,
+            "dayName": "Ma 10.1.",
+            "menuCourses": [
+                {
+                    "id": 1,
+                    "courseName": "Salaattipöytä",
+                    "courseType": "salad",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 1,
+                        "likes": 46,
+                        "dislikes": 12
+                    }
+                },
+                {
+                    "id": 2,
+                    "courseName": "Tomaatti-linssikeittoa",
+                    "courseType": "soup",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 2,
+                        "likes": 19,
+                        "dislikes": 67
+                    }
+                },
+                {
+                    "id": 3,
+                    "courseName": "Kebabkastiketta riisiä",
+                    "courseType": "main",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 3,
+                        "likes": 21,
+                        "dislikes": 75
+                    }
+                }
+            ]
+        },
+        {
+            "id": 703,
+            "dayName": "Ti 11.1.",
+            "menuCourses": [
+                {
+                    "id": 1,
+                    "courseName": "Salaattipöytä",
+                    "courseType": "salad",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 1,
+                        "likes": 46,
+                        "dislikes": 12
+                    }
+                },
+                {
+                    "id": 4,
+                    "courseName": "Pinaattikeittoa",
+                    "courseType": "soup",
+                    "allergens": [
+                        {
+                            "id": 1,
+                            "allergenSymbol": "L"
+                        },
+                        {
+                            "id": 2,
+                            "allergenSymbol": "G"
+                        }
+                    ],
+                    "courseVote": {
+                        "id": 4,
+                        "likes": 46,
+                        "dislikes": 10
+                    }
+                },
+                {
+                    "id": 5,
+                    "courseName": "Chili-kookos broileria",
+                    "courseType": "main",
+                    "allergens": [
+                        {
+                            "id": 1,
+                            "allergenSymbol": "L"
+                        },
+                        {
+                            "id": 2,
+                            "allergenSymbol": "G"
+                        }
+                    ],
+                    "courseVote": {
+                        "id": 5,
+                        "likes": 75,
+                        "dislikes": 51
+                    }
+                },
+                {
+                    "id": 6,
+                    "courseName": "Liha-kaalilaatikkoa",
+                    "courseType": "main",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 6,
+                        "likes": 10,
+                        "dislikes": 81
+                    }
+                }
+            ]
+        },
+        {
+            "id": 704,
+            "dayName": "Ke 12.1.",
+            "menuCourses": [
+                {
+                    "id": 7,
+                    "courseName": "Antipastopöytä",
+                    "courseType": "salad",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 7,
+                        "likes": 62,
+                        "dislikes": 48
+                    }
+                },
+                {
+                    "id": 8,
+                    "courseName": "Juuressosekeittoa",
+                    "courseType": "soup",
+                    "allergens": [
+                        {
+                            "id": 1,
+                            "allergenSymbol": "L"
+                        },
+                        {
+                            "id": 2,
+                            "allergenSymbol": "G"
+                        }
+                    ],
+                    "courseVote": {
+                        "id": 8,
+                        "likes": 80,
+                        "dislikes": 70
+                    }
+                },
+                {
+                    "id": 9,
+                    "courseName": "Uunimakkaraa",
+                    "courseType": "main",
+                    "allergens": [
+                        {
+                            "id": 1,
+                            "allergenSymbol": "L"
+                        },
+                        {
+                            "id": 2,
+                            "allergenSymbol": "G"
+                        }
+                    ],
+                    "courseVote": {
+                        "id": 9,
+                        "likes": 100,
+                        "dislikes": 90
+                    }
+                }
+            ]
+        },
+        {
+            "id": 705,
+            "dayName": "To 13.1.",
+            "menuCourses": [
+                {
+                    "id": 1,
+                    "courseName": "Salaattipöytä",
+                    "courseType": "salad",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 1,
+                        "likes": 46,
+                        "dislikes": 12
+                    }
+                },
+                {
+                    "id": 10,
+                    "courseName": "Hernekeittoa",
+                    "courseType": "soup",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 10,
+                        "likes": 23,
+                        "dislikes": 66
+                    }
+                },
+                {
+                    "id": 11,
+                    "courseName": "Possun sisäfilettä",
+                    "courseType": "main",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 11,
+                        "likes": 33,
+                        "dislikes": 78
+                    }
+                }
+            ]
+        },
+        {
+            "id": 706,
+            "dayName": "Pe 14.1.",
+            "menuCourses": [
+                {
+                    "id": 1,
+                    "courseName": "Salaattipöytä",
+                    "courseType": "salad",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 1,
+                        "likes": 46,
+                        "dislikes": 12
+                    }
+                },
+                {
+                    "id": 12,
+                    "courseName": "Borssikeittoa",
+                    "courseType": "soup",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 12,
+                        "likes": 45,
+                        "dislikes": 88
+                    }
+                },
+                {
+                    "id": 13,
+                    "courseName": "Aurajuusto-härkäruukkua",
+                    "courseType": "main",
+                    "allergens": [],
+                    "courseVote": {
+                        "id": 13,
+                        "likes": 56,
+                        "dislikes": 99
+                    }
+                }
+            ]
+        }
+    ]
+}
