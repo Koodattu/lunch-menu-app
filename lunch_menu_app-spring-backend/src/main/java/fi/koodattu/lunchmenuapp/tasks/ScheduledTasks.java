@@ -49,14 +49,15 @@ public class ScheduledTasks {
             // check if missing or changed from database
             if (NeedsToSaveDocumentInDatabase(lunchMenuWeek)){
                 lunchMenuService.saveLunchMenuWeek(lunchMenuWeek);
+                log.info("[INFO] Saved new lunch menu week to database.");
             }
 
             // save file if not saved
             if (NeedsToSaveDocumentInFolder(lunchMenuWeek)){
                 SaveDocumentFile(xwpfDocument, lunchMenuWeek);
+                log.info("[INFO] Saved new lunch menu week document to folder.");
             }
 
-            log.info("[INFO] Saved new lunch menu week to database.");
         }
         catch (Exception ex){
             log.error("[ERROR] Error fetching menu from drive.", ex);
@@ -76,7 +77,7 @@ public class ScheduledTasks {
         Date dbSavedDate = savedWeek.get().getDocumentSaveDate();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-        return dateFormat.format(docSavedDate).equals(dateFormat.format(dbSavedDate));
+        return !dateFormat.format(docSavedDate).equals(dateFormat.format(dbSavedDate));
     }
 
     private long GenerateWeekId(String weekName, String year){
@@ -100,7 +101,7 @@ public class ScheduledTasks {
         Date folderSavedDate = properties.getModified() != null ? properties.getModified() : properties.getCreated();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-        return dateFormat.format(docSavedDate).equals(dateFormat.format(folderSavedDate));
+        return !dateFormat.format(docSavedDate).equals(dateFormat.format(folderSavedDate));
     }
 
     private void SaveDocumentFile(XWPFDocument document, LunchMenuWeek lunchMenuWeek) throws IOException {

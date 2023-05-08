@@ -27,8 +27,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
     getPackageInfo();
   }
 
-  Future showLicensesDialog() {
-    return showDialog(
+  void showLicensesDialog() {
+    showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
@@ -148,6 +148,8 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Padding(
       padding: const EdgeInsets.all(4),
       child: Column(
@@ -237,7 +239,7 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
               ),
               InteractableCard(
                 voidCallback: showLicensesDialog,
-                title: "licenses".tr(),
+                title: "oss_licenses".tr(),
                 subTitle: "show_licenses".tr(),
                 iconData: Icons.info,
               ),
