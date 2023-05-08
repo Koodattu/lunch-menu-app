@@ -32,8 +32,13 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
 
   Future<List<MenuWeek>> fetchAll() async {
     var response = await networkingService.getFromApi(RestApiType.allMenuWeeks);
+    if (response is List<MenuWeek>) {
+      response.sort((a, b) => b.documentSaveDate.compareTo(a.documentSaveDate));
 
-    return response is List<MenuWeek> ? Future.value(response) : Future.error(response);
+      return Future.value(response);
+    }
+
+    return Future.error(response);
   }
 
   @override
@@ -69,7 +74,7 @@ class _HistoryPageState extends State<HistoryPage> with AutomaticKeepAliveClient
                                 header: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                                   child: Text(
-                                    menuWeek.weekName,
+                                    "${menuWeek.documentSaveDate.year} - ${menuWeek.weekName}",
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
