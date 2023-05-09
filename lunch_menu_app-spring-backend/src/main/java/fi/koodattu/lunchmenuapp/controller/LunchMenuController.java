@@ -3,7 +3,6 @@ package fi.koodattu.lunchmenuapp.controller;
 import fi.koodattu.lunchmenuapp.model.LunchMenuCourse;
 import fi.koodattu.lunchmenuapp.model.LunchMenuCourseVote;
 import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
-import fi.koodattu.lunchmenuapp.repository.LunchMenuWeekRepository;
 import fi.koodattu.lunchmenuapp.service.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

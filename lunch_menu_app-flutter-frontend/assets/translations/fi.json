@@ -17,7 +17,7 @@
     "wednesday": "Keskiviikko",
     "thursday": "Torstai",
     "friday": "Perjantai",
-    "this_week": "Tällä viikolla {}",
+    "this_weeks_menu": "Viikon {} ruokalista",
     "application": "Sovellus",
     "developer": "Kehittäjä",
     "version": "Sovellusversio",
@@ -52,5 +52,6 @@
     "server_or_internet_down": "Palvelin on alhaalla tai et ole yhteydessä internettiin.",
     "server_or_internet_slow" : "Palvelin tai internet yhteytesi käy hitaalla.",
     "testing": "Testaus",
-    "use_mock_data": "Käytä testi dataa"
+    "use_mock_data": "Käytä testi dataa",
+    "current_week_not_yet_available": "Tämän viikon ruokalista ei ole vielä saatavilla.\nAlla on näytetty viimeisin ruokalista."
 }

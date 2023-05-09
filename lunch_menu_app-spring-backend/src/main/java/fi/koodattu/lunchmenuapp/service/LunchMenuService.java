@@ -5,6 +5,8 @@ import fi.koodattu.lunchmenuapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +70,7 @@ public class LunchMenuService {
         if (lunchMenuWeeks.isEmpty()) {
             return null;
         } else {
+            lunchMenuWeeks.sort(Comparator.comparingInt(a -> (int) a.getId()));
             return lunchMenuWeeks.get(lunchMenuWeeks.size() - 1);
         }
     }

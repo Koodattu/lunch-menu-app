@@ -21,6 +21,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
 
   bool showToday = true;
   bool showTomorrow = true;
+  bool latestIsCurrentWeek = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -28,29 +29,53 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
   @override
   void initState() {
     super.initState();
-    initWeekMenu();
+    _initWeekMenu();
   }
 
-  initWeekMenu() {
-    getSettings();
+  _initWeekMenu() {
+    _getSettings();
     setState(() {
-      menuWeek = fetchMenu();
+      menuWeek = _fetchMenu();
     });
   }
 
-  getSettings() async {
+  _getSettings() async {
     sharedPreferences = await SharedPreferences.getInstance();
     showToday = sharedPreferences.getBool("app_settings_menu_show_today") ?? true;
     showTomorrow = sharedPreferences.getBool("app_settings_menu_show_tomorrow") ?? true;
   }
 
-  Future<MenuWeek> fetchMenu() async {
+  Future<MenuWeek> _fetchMenu() async {
     var response = await networkingService.getFromApi(RestApiType.latestMenuWeek);
+    if (response is MenuWeek) {
+      latestIsCurrentWeek = response.weekName.contains(_weekNumber(DateTime.now()).toString());
 
-    return response is MenuWeek ? Future.value(response) : Future.error(response);
+      return Future.value(response);
+    }
+
+    return Future.error(response);
   }
 
-  MenuDay? getMenuDay(MenuWeek? menuWeek, bool tomorrow) {
+  int _numOfWeeks(int year) {
+    DateTime dec28 = DateTime(year, 12, 28);
+    int dayOfDec28 = int.parse(DateFormat("D").format(dec28));
+
+    return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
+  }
+
+  int _weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    int woy = ((dayOfYear - date.weekday + 10) / 7).floor();
+    if (woy < 1) {
+      woy = _numOfWeeks(date.year - 1);
+    } else if (woy > _numOfWeeks(date.year)) {
+      woy = 1;
+    }
+
+    return woy;
+  }
+
+  MenuDay? _getMenuDay(MenuWeek? menuWeek, bool tomorrow) {
     DateTime now = DateTime.now();
     int dayOfWeek = tomorrow ? now.weekday : now.weekday - 1;
     if (menuWeek!.menuDays.length <= dayOfWeek) {
@@ -60,6 +85,10 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
     return menuWeek.menuDays[dayOfWeek];
   }
 
+  String _getWeekNumber(String weekName) {
+    return weekName.replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -67,7 +96,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
     return LayoutBuilder(
       builder: (context, constraints) => RefreshIndicator(
         onRefresh: () async {
-          await initWeekMenu();
+          await _initWeekMenu();
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -108,16 +137,25 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
                             ),
                           ],
                         ),
-                        if (showToday)
+                        if (!latestIsCurrentWeek)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 32, bottom: 16),
+                            child: const Text(
+                              "current_week_not_yet_available",
+                              style: TextStyle(fontSize: 16, color: Colors.orange),
+                              textAlign: TextAlign.center,
+                            ).tr(),
+                          ),
+                        if (showToday && latestIsCurrentWeek)
                           DayMenuTitleWidget(
                             relativeDay: "today".tr(),
-                            menuDay: getMenuDay(snapshot.data, false),
+                            menuDay: _getMenuDay(snapshot.data, false),
                             showVoteIcons: true,
                           ),
-                        if (showTomorrow)
+                        if (showTomorrow && latestIsCurrentWeek)
                           DayMenuTitleWidget(
                             relativeDay: "tomorrow".tr(),
-                            menuDay: getMenuDay(snapshot.data, true),
+                            menuDay: _getMenuDay(snapshot.data, true),
                             showVoteIcons: false,
                           ),
                         const SizedBox(
@@ -125,7 +163,7 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
                         ),
                         Center(
                           child: Text(
-                            "this_week".tr(args: [snapshot.data!.weekName]),
+                            "this_weeks_menu".tr(args: [_getWeekNumber(snapshot.data!.weekName)]),
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                           ),
                         ),
@@ -221,7 +259,7 @@ class DayMenuWidget extends StatelessWidget {
   final MenuDay? menuDay;
   final bool showVoteIcons;
 
-  String lengthenDayName(String dayName) {
+  String _lengthenDayName(String dayName) {
     List<String> weekDays = ["monday".tr(), "tuesday".tr(), "wednesday".tr(), "thursday".tr(), "friday".tr()];
     List<String> daysInFinnish = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai"];
 
@@ -246,7 +284,7 @@ class DayMenuWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(6),
           child: Text(
-            lengthenDayName(menuDay!.dayName),
+            _lengthenDayName(menuDay!.dayName),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
         ),
@@ -278,7 +316,7 @@ class CourseCardWidget extends StatelessWidget {
     required this.showVoteIcons,
   });
 
-  ImageIcon getMenuTypeIcon(String courseType) {
+  ImageIcon _getMenuTypeIcon(String courseType) {
     if (courseType.toLowerCase().contains("salad")) {
       return const ImageIcon(
         AssetImage('assets/icon_salad.png'),
@@ -313,7 +351,7 @@ class CourseCardWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  getMenuTypeIcon(menuCourse.courseType),
+                  _getMenuTypeIcon(menuCourse.courseType),
                   const SizedBox(
                     width: 16,
                   ),
@@ -407,10 +445,10 @@ class _VoteIconsState extends State<VoteIcons> {
   void initState() {
     super.initState();
 
-    readSavedVotes();
+    _readSavedVotes();
   }
 
-  void readSavedVotes() async {
+  void _readSavedVotes() async {
     UserSavedVote newSavedVote = await voteSavingService.getVote(widget.menuCourseId);
 
     setState(() {
@@ -418,7 +456,7 @@ class _VoteIconsState extends State<VoteIcons> {
     });
   }
 
-  void voteButtonPressed(bool votedLike) async {
+  void _voteButtonPressed(bool votedLike) async {
     UserSavedVote newSavedVote = await voteSavingService.saveVote(votedLike, savedVote, widget.menuCourseId);
 
     if (newSavedVote != savedVote) {
@@ -438,7 +476,7 @@ class _VoteIconsState extends State<VoteIcons> {
           height: 36,
           child: IconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => voteButtonPressed(true),
+            onPressed: () => _voteButtonPressed(true),
             icon: Icon(
               savedVote.liked ? Icons.thumb_up : Icons.thumb_up_outlined,
               color: Colors.green,
@@ -450,7 +488,7 @@ class _VoteIconsState extends State<VoteIcons> {
           height: 36,
           child: IconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => voteButtonPressed(false),
+            onPressed: () => _voteButtonPressed(false),
             icon: Icon(
               savedVote.disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
               color: Colors.red,
