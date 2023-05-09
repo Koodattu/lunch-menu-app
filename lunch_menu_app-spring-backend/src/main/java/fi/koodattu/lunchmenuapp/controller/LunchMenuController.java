@@ -2,6 +2,7 @@ package fi.koodattu.lunchmenuapp.controller;
 
 import fi.koodattu.lunchmenuapp.model.LunchMenuCourse;
 import fi.koodattu.lunchmenuapp.model.LunchMenuCourseVote;
+import fi.koodattu.lunchmenuapp.model.LunchMenuFrequentCourse;
 import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
 import fi.koodattu.lunchmenuapp.service.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,4 +100,18 @@ public class LunchMenuController {
         }
     }
 
+    @GetMapping("/lunch-menu-courses/frequent")
+    public ResponseEntity<List<LunchMenuFrequentCourse>> getMostFrequentLunchMenuCourses() {
+        try {
+            List<LunchMenuFrequentCourse> frequentCourses = lunchMenuService.getMostFrequentLunchMenuCourses();
+
+            if (frequentCourses.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(frequentCourses, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

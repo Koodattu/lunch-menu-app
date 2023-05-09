@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_lunch_menu_app/model/frequent_course.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
@@ -50,6 +51,8 @@ class NetworkingService {
         return "/lunch-menu-courses";
       case RestApiType.vote:
         return "/lunch-menu-course-votes/vote";
+      case RestApiType.mostFrequentCourses:
+        return "/lunch-menu-courses/frequent";
     }
   }
 
@@ -74,6 +77,8 @@ class NetworkingService {
         return menuCourseListFromJson(json);
       case RestApiType.vote:
         return courseVoteFromJson(json);
+      case RestApiType.mostFrequentCourses:
+        return frequentCoursesListFromJson(json);
     }
   }
 
@@ -87,6 +92,8 @@ class NetworkingService {
         return menuCourseListToJson(object as List<MenuCourse>);
       case RestApiType.vote:
         return courseVoteToJson(object as CourseVote);
+      case RestApiType.mostFrequentCourses:
+        return frequentCoursesListToJson(object as List<FrequentCourse>);
     }
   }
 
@@ -105,6 +112,9 @@ class NetworkingService {
         break;
       case RestApiType.vote:
         data = await rootBundle.loadString("assets/mock_data/course_vote.json");
+        break;
+      case RestApiType.mostFrequentCourses:
+        data = await rootBundle.loadString("assets/mock_data/frequent_courses.json");
         break;
     }
 
@@ -153,4 +163,4 @@ class NetworkingService {
   }
 }
 
-enum RestApiType { latestMenuWeek, allMenuWeeks, allMenuCourses, vote }
+enum RestApiType { latestMenuWeek, allMenuWeeks, allMenuCourses, vote, mostFrequentCourses }

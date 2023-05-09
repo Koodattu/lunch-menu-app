@@ -5,10 +5,7 @@ import fi.koodattu.lunchmenuapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LunchMenuService {
@@ -94,5 +91,33 @@ public class LunchMenuService {
         }
 
         return null;
+    }
+
+    public List<LunchMenuFrequentCourse> getMostFrequentLunchMenuCourses(){
+        List<LunchMenuDay> days = menuDayRepository.findAll();
+        HashMap<Long, Integer> frequentCoursesMap = new HashMap<>();
+
+        for (LunchMenuDay day : days){
+            for (LunchMenuCourse course : day.getMenuCourses()){
+                if (frequentCoursesMap.containsKey(course.getId())){
+                    frequentCoursesMap.put(course.getId(), frequentCoursesMap.get(course.getId()) + 1);
+                } else {
+                    frequentCoursesMap.put(course.getId(), 1);
+                }
+            }
+        }
+
+        List<LunchMenuCourse> courses = menuCourseRepository.findAll();
+        List<LunchMenuFrequentCourse> frequentCourses = new ArrayList<>();
+
+        for(Map.Entry<Long, Integer> entry : frequentCoursesMap.entrySet()){
+            Optional<LunchMenuCourse> course = courses.stream().filter(c -> c.getId() == entry.getKey()).findAny();
+            course.ifPresent(lunchMenuCourse -> frequentCourses.add(new LunchMenuFrequentCourse(lunchMenuCourse, entry.getValue())));
+        }
+
+        frequentCourses.sort(Comparator.comparingInt(LunchMenuFrequentCourse::getCount));
+        Collections.reverse(frequentCourses);
+
+        return frequentCourses;
     }
 }

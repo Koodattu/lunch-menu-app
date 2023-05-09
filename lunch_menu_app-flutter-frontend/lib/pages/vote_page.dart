@@ -2,11 +2,18 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lunch_menu_app/model/frequent_course.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
+
+class _CourseLists {
+  List<MenuCourse> menuCourses;
+  List<FrequentCourse> frequentCourses;
+  _CourseLists(this.menuCourses, this.frequentCourses);
+}
 
 class VotePage extends StatefulWidget {
   const VotePage({super.key});
@@ -17,7 +24,8 @@ class VotePage extends StatefulWidget {
 
 class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<VotePage> {
   NetworkingService networkingService = NetworkingService();
-  late Future<List<MenuCourse>> menuCourses;
+  Future<_CourseLists>? courseLists;
+  String? error;
 
   @override
   bool get wantKeepAlive => true;
@@ -28,21 +36,39 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
     getAllMenuCourses();
   }
 
-  getAllMenuCourses() {
+  getAllMenuCourses() async {
+    List<MenuCourse> menuCourses = await fetchAllMenuCourses();
+    List<FrequentCourse> frequentCourses = await fetchFrequentCourses();
     setState(() {
-      menuCourses = fetchAll();
+      courseLists = error == null ? Future.value(_CourseLists(menuCourses, frequentCourses)) : Future.error(error!);
     });
   }
 
-  Future<List<MenuCourse>> fetchAll() async {
+  Future<List<MenuCourse>> fetchAllMenuCourses() async {
     var response = await networkingService.getFromApi(RestApiType.allMenuCourses);
 
     if (response is List<MenuCourse>) {
       response.sort(sortByLikeDislikeRatio);
       response = response.reversed.toList();
+
+      return response;
     }
 
-    return response is List<MenuCourse> ? Future.value(response) : Future.error(response);
+    error = response as String;
+
+    return [];
+  }
+
+  Future<List<FrequentCourse>> fetchFrequentCourses() async {
+    var response = await networkingService.getFromApi(RestApiType.mostFrequentCourses);
+
+    if (response is List<FrequentCourse>) {
+      return response;
+    }
+
+    error = response as String;
+
+    return [];
   }
 
   int sortByLikeDislikeRatio(MenuCourse a, MenuCourse b) {
@@ -95,73 +121,14 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: FutureBuilder<List<MenuCourse>>(
-                future: menuCourses,
+              child: FutureBuilder<_CourseLists>(
+                future: courseLists,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Text(
-                            "most_liked_courses",
-                            style: TextStyle(fontSize: 20),
-                          ).tr(),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: 6,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    MenuCourse menuCourse = snapshot.data![index];
-
-                                    if (index.isOdd) {
-                                      return const Divider();
-                                    }
-
-                                    index = index ~/ 2;
-
-                                    return CourseLikesDislikes(menuCourse: menuCourse, index: index);
-                                  },
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => AllMostLikedCourses(courses: snapshot.data!),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text("show_all").tr(),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => VoteOnCourses(
-                                              menuCourses: snapshot.data!,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text("vote").tr(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        MostLikedCoursesCard(menuCourses: snapshot.data!.menuCourses),
+                        FrequentCoursesCard(frequentCourses: snapshot.data!.frequentCourses),
                       ],
                     );
                   } else if (snapshot.hasError) {
@@ -189,6 +156,84 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
           ),
         ),
       ),
+    );
+  }
+}
+
+class MostLikedCoursesCard extends StatelessWidget {
+  const MostLikedCoursesCard({
+    super.key,
+    required this.menuCourses,
+  });
+
+  final List<MenuCourse> menuCourses;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: const Text(
+            "most_liked_courses",
+            style: TextStyle(fontSize: 20),
+          ).tr(),
+        ),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    MenuCourse menuCourse = menuCourses[index];
+
+                    if (index.isOdd) {
+                      return const Divider();
+                    }
+
+                    index = index ~/ 2;
+
+                    return CourseLikesDislikes(menuCourse: menuCourse, index: index);
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AllMostLikedCourses(courses: menuCourses),
+                          ),
+                        );
+                      },
+                      child: const Text("show_all").tr(),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VoteOnCourses(
+                              menuCourses: menuCourses,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text("vote").tr(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -573,6 +618,207 @@ class _AllVotedCoursesState extends State<AllVotedCourses> {
                   MenuCourse course = filteredCourses[index];
 
                   return CourseCardWidget(menuCourse: course, showVoteIcons: true);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FrequentCoursesCard extends StatelessWidget {
+  const FrequentCoursesCard({
+    super.key,
+    required this.frequentCourses,
+  });
+
+  final List<FrequentCourse> frequentCourses;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: const Text(
+            "most_frequent_courses",
+            style: TextStyle(fontSize: 20),
+          ).tr(),
+        ),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    FrequentCourse course = frequentCourses[index];
+
+                    if (index.isOdd) {
+                      return const Divider();
+                    }
+
+                    index = index ~/ 2;
+
+                    return FrequentCourseWidget(frequentCourse: course, index: index);
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllFrequentCourses(frequentCourses: frequentCourses),
+                      ),
+                    );
+                  },
+                  child: const Text("show_all").tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class FrequentCourseWidget extends StatelessWidget {
+  const FrequentCourseWidget({super.key, required this.frequentCourse, required this.index});
+
+  final FrequentCourse frequentCourse;
+  final int index;
+
+  ImageIcon getRankIcon(int rank, String courseType) {
+    if (rank >= 0 && rank <= 2) {
+      final colors = [Colors.yellow, Colors.grey, Colors.brown];
+
+      return ImageIcon(
+        AssetImage("assets/icon_trophy_$rank.png"),
+        size: 50,
+        color: colors[rank],
+      );
+    }
+
+    if (courseType.toLowerCase().contains("salad")) {
+      return const ImageIcon(
+        AssetImage('assets/icon_salad.png'),
+        color: Colors.green,
+        size: 50,
+      );
+    } else if (courseType.toLowerCase().contains("soup")) {
+      return const ImageIcon(
+        AssetImage('assets/icon_soup.png'),
+        color: Colors.red,
+        size: 50,
+      );
+    } else {
+      return const ImageIcon(
+        AssetImage('assets/icon_dinner.png'),
+        color: Colors.cyan,
+        size: 50,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          getRankIcon(index, frequentCourse.course.courseType),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                frequentCourse.course.courseName,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          Text(
+            frequentCourse.count.toString(),
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AllFrequentCourses extends StatefulWidget {
+  const AllFrequentCourses({super.key, required this.frequentCourses});
+
+  final List<FrequentCourse> frequentCourses;
+
+  @override
+  State<AllFrequentCourses> createState() => _AllFrequentCoursesState();
+}
+
+class _AllFrequentCoursesState extends State<AllFrequentCourses> {
+  List<FrequentCourse> filteredCourses = [];
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredCourses = widget.frequentCourses;
+  }
+
+  void searchCourse(String searchTerm) {
+    setState(() {
+      filteredCourses = widget.frequentCourses
+          .where((element) => element.course.courseName.toLowerCase().contains(searchTerm.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("most_frequent_courses").tr(),
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: "course_name".tr(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.blue),
+                  ),
+                ),
+                onChanged: searchCourse,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: filteredCourses.length,
+                itemBuilder: (context, index) {
+                  FrequentCourse course = filteredCourses[index];
+
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FrequentCourseWidget(frequentCourse: course, index: index),
+                    ),
+                  );
                 },
               ),
             ),
