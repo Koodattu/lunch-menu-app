@@ -55,5 +55,6 @@
     "use_mock_data": "Use offline mock data",
     "current_week_not_yet_available": "The menu for the current week is not yet available.\nBelow is shown the latest menu available.",
     "most_frequent_courses": "Most frequent courses",
-    "longest_wait_courses": "Longest wait (days since)"
+    "longest_wait_courses": "Longest wait (days since)",
+    "best_ranked_courses": "Best ranked courses"
 }

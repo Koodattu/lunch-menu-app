@@ -14,6 +14,10 @@ String menuWeekToJson(MenuWeek data) => json.encode(data.toJson());
 CourseVote courseVoteFromJson(String str) => CourseVote.fromJson(json.decode(str));
 String courseVoteToJson(CourseVote data) => json.encode(data.toJson());
 
+List<CourseVote> courseVoteListFromJson(String str) =>
+    List<CourseVote>.from(json.decode(str).map((x) => CourseVote.fromJson(x)));
+String courseVoteListToJson(List<CourseVote> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 List<MenuCourse> menuCourseListFromJson(String str) =>
     List<MenuCourse>.from(json.decode(str).map((x) => MenuCourse.fromJson(x)));
 String menuCourseListToJson(List<MenuCourse> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -139,11 +143,13 @@ class CourseVote {
     required this.id,
     required this.likes,
     required this.dislikes,
+    required this.ranked,
   });
 
   final int id;
   final int likes;
   final int dislikes;
+  final int ranked;
 
   double calculateLikeDislikeRatio() {
     if (likes < 0 || dislikes < 0) {
@@ -166,11 +172,13 @@ class CourseVote {
         id: json["id"],
         likes: json["likes"],
         dislikes: json["dislikes"],
+        ranked: json["ranked"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "likes": likes,
         "dislikes": dislikes,
+        "ranked": ranked,
       };
 }

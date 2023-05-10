@@ -155,6 +155,13 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
     return lastSeenCourses;
   }
 
+  List<Tuple2<MenuCourse, int>> _getSortedList(List<MenuCourse> courses) {
+    List<Tuple2<MenuCourse, int>> tupleList = courses.map((e) => Tuple2(e, e.courseVote.ranked)).toList();
+    tupleList.sort((a, b) => b.item2.compareTo(a.item2));
+
+    return tupleList;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -182,6 +189,11 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                           coursesTuple: snapshot.data!.menuCourses.map((e) => Tuple2(e, 0)).toList(),
                         ),
                         _CoursesSummaryCard(
+                          title: "best_ranked_courses".tr(),
+                          type: _CourseType.bestRanked,
+                          coursesTuple: _getSortedList(snapshot.data!.menuCourses),
+                        ),
+                        _CoursesSummaryCard(
                           title: "most_frequent_courses".tr(),
                           type: _CourseType.frequent,
                           coursesTuple: snapshot.data!.frequentCourses.map((e) => Tuple2(e.course, e.count)).toList(),
@@ -190,11 +202,6 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                           title: "longest_wait_courses".tr(),
                           type: _CourseType.longestWait,
                           coursesTuple: snapshot.data!.lastSeenCourses.map((e) => Tuple2(e.course, e.days)).toList(),
-                        ),
-                        _CoursesSummaryCard(
-                          title: "best_ranked_courses".tr(),
-                          type: _CourseType.bestRanked,
-                          coursesTuple: snapshot.data!.menuCourses.map((e) => Tuple2(e, 0)).toList(),
                         ),
                       ],
                     );

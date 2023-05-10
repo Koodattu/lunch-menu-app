@@ -72,7 +72,7 @@ class VoteSavingService {
       return savedVote;
     }
 
-    CourseVote courseVote = CourseVote(id: menuCourseId, likes: likes, dislikes: dislikes);
+    CourseVote courseVote = CourseVote(id: menuCourseId, likes: likes, dislikes: dislikes, ranked: 0);
 
     var response = await _networkingService.postToApi(RestApiType.vote, courseVote);
     if (response is CourseVote) {

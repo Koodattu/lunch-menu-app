@@ -93,6 +93,20 @@ public class LunchMenuService {
         return null;
     }
 
+    public List<LunchMenuCourseVote> saveVoteRanked(List<LunchMenuCourseVote> votes){
+        Optional<LunchMenuCourseVote> courseVoteWinner = courseVoteRepository.findById(votes.get(0).getId());
+        Optional<LunchMenuCourseVote> courseVoteLoser = courseVoteRepository.findById(votes.get(1).getId());
+
+        if (courseVoteWinner.isPresent() && courseVoteLoser.isPresent()){
+            courseVoteWinner.get().setRanked(courseVoteWinner.get().getRanked() + votes.get(0).getRanked());
+            courseVoteLoser.get().setRanked(courseVoteLoser.get().getRanked() + votes.get(1).getRanked());
+
+            return courseVoteRepository.saveAll(Arrays.asList(courseVoteWinner.get(), courseVoteLoser.get()));
+        }
+
+        return null;
+    }
+
     public List<LunchMenuFrequentCourse> getMostFrequentLunchMenuCourses(){
         List<LunchMenuDay> days = menuDayRepository.findAll();
         HashMap<Long, Integer> frequentCoursesMap = new HashMap<>();

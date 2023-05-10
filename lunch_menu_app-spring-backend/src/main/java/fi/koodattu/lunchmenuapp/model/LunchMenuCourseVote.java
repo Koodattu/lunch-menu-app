@@ -3,6 +3,7 @@ package fi.koodattu.lunchmenuapp.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 @Entity
@@ -24,4 +25,7 @@ public class LunchMenuCourseVote {
 
     @Column(name = "dislikes")
     private int dislikes;
+
+    @Column(name = "ranked", nullable = false)
+    private int ranked;
 }

@@ -100,6 +100,18 @@ public class LunchMenuController {
         }
     }
 
+    @PostMapping("/lunch-menu-course-votes/ranked")
+    public ResponseEntity<List<LunchMenuCourseVote>> postLunchMenuCourseVoteRanked(@RequestBody List<LunchMenuCourseVote> courseVoteRanked) {
+
+        List<LunchMenuCourseVote> votes = lunchMenuService.saveVoteRanked(courseVoteRanked);
+
+        if (votes == null) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(votes, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/lunch-menu-courses/frequent")
     public ResponseEntity<List<LunchMenuFrequentCourse>> getMostFrequentLunchMenuCourses() {
         try {
