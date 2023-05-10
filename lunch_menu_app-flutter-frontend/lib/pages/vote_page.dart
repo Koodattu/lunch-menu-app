@@ -18,7 +18,7 @@ class _CourseLists {
   _CourseLists(this.menuCourses, this.frequentCourses, this.lastSeenCourses);
 }
 
-enum _CourseType { frequent, longestWait }
+enum _CourseType { mostLiked, frequent, longestWait, bestRanked }
 
 class VotePage extends StatefulWidget {
   const VotePage({super.key});
@@ -176,16 +176,25 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                   if (snapshot.hasData) {
                     return Column(
                       children: [
-                        MostLikedCoursesCard(menuCourses: snapshot.data!.menuCourses),
-                        CoursesSummaryCard(
+                        _CoursesSummaryCard(
+                          title: "most_liked_courses".tr(),
+                          type: _CourseType.mostLiked,
+                          coursesTuple: snapshot.data!.menuCourses.map((e) => Tuple2(e, 0)).toList(),
+                        ),
+                        _CoursesSummaryCard(
                           title: "most_frequent_courses".tr(),
                           type: _CourseType.frequent,
                           coursesTuple: snapshot.data!.frequentCourses.map((e) => Tuple2(e.course, e.count)).toList(),
                         ),
-                        CoursesSummaryCard(
+                        _CoursesSummaryCard(
                           title: "longest_wait_courses".tr(),
                           type: _CourseType.longestWait,
                           coursesTuple: snapshot.data!.lastSeenCourses.map((e) => Tuple2(e.course, e.days)).toList(),
+                        ),
+                        _CoursesSummaryCard(
+                          title: "best_ranked_courses".tr(),
+                          type: _CourseType.bestRanked,
+                          coursesTuple: snapshot.data!.menuCourses.map((e) => Tuple2(e, 0)).toList(),
                         ),
                       ],
                     );
@@ -686,8 +695,8 @@ class _AllVotedCoursesState extends State<AllVotedCourses> {
   }
 }
 
-class CoursesSummaryCard extends StatelessWidget {
-  const CoursesSummaryCard({
+class _CoursesSummaryCard extends StatelessWidget {
+  const _CoursesSummaryCard({
     super.key,
     required this.title,
     required this.type,
@@ -697,6 +706,25 @@ class CoursesSummaryCard extends StatelessWidget {
   final String title;
   final _CourseType type;
   final List<Tuple2<MenuCourse, int>> coursesTuple;
+
+  Widget _getListRouteWidget(_CourseType type, String title, List<Tuple2<MenuCourse, int>> coursesTuple) {
+    if (type == _CourseType.mostLiked) {
+      return AllMostLikedCourses(courses: coursesTuple.map((e) => e.item1).toList());
+    }
+
+    return AllCoursesListView(title: title, coursesTuple: coursesTuple);
+  }
+
+  Widget _getVoteRouteWidget(_CourseType type) {
+    if (type == _CourseType.mostLiked) {
+      return VoteOnCourses(menuCourses: coursesTuple.map((e) => e.item1).toList());
+    }
+    if (type == _CourseType.bestRanked) {
+      return Container();
+    }
+
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -727,26 +755,40 @@ class CoursesSummaryCard extends StatelessWidget {
 
                     index = index ~/ 2;
 
-                    return CourseRankCountWidget(
-                      course: courseTuple.item1,
-                      count: courseTuple.item2,
-                      index: index,
-                    );
+                    if (type == _CourseType.mostLiked) {
+                      return CourseLikesDislikes(menuCourse: courseTuple.item1, index: index);
+                    }
+
+                    return CourseRankCountWidget(course: courseTuple.item1, count: courseTuple.item2, index: index);
                   },
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllCoursesListView(
-                          title: title,
-                          coursesTuple: coursesTuple,
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => _getListRouteWidget(type, title, coursesTuple),
+                          ),
+                        );
+                      },
+                      child: const Text("show_all").tr(),
+                    ),
+                    if (type == _CourseType.mostLiked || type == _CourseType.bestRanked)
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => _getVoteRouteWidget(type),
+                            ),
+                          );
+                        },
+                        child: const Text("vote").tr(),
                       ),
-                    );
-                  },
-                  child: const Text("show_all").tr(),
+                  ],
                 ),
               ],
             ),
