@@ -2,18 +2,23 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lunch_menu_app/model/course_last_seen.dart';
 import 'package:flutter_lunch_menu_app/model/frequent_course.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
+import 'package:tuple/tuple.dart';
 
 class _CourseLists {
   List<MenuCourse> menuCourses;
   List<FrequentCourse> frequentCourses;
-  _CourseLists(this.menuCourses, this.frequentCourses);
+  List<CourseLastSeen> lastSeenCourses;
+  _CourseLists(this.menuCourses, this.frequentCourses, this.lastSeenCourses);
 }
+
+enum _CourseType { frequent, longestWait }
 
 class VotePage extends StatefulWidget {
   const VotePage({super.key});
@@ -39,8 +44,12 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
   getAllMenuCourses() async {
     List<MenuCourse> menuCourses = await fetchAllMenuCourses();
     List<FrequentCourse> frequentCourses = await fetchFrequentCourses();
+    List<MenuWeek> menuWeeks = await fetchAllMenuWeeks();
+    List<CourseLastSeen> lastSeenCourses = getLastSeenCourses(menuWeeks);
     setState(() {
-      courseLists = error == null ? Future.value(_CourseLists(menuCourses, frequentCourses)) : Future.error(error!);
+      courseLists = error == null
+          ? Future.value(_CourseLists(menuCourses, frequentCourses, lastSeenCourses))
+          : Future.error(error!);
     });
   }
 
@@ -63,6 +72,18 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
     var response = await networkingService.getFromApi(RestApiType.mostFrequentCourses);
 
     if (response is List<FrequentCourse>) {
+      return response;
+    }
+
+    error = response as String;
+
+    return [];
+  }
+
+  Future<List<MenuWeek>> fetchAllMenuWeeks() async {
+    var response = await networkingService.getFromApi(RestApiType.allMenuWeeks);
+
+    if (response is List<MenuWeek>) {
       return response;
     }
 
@@ -106,6 +127,34 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
     return 0;
   }
 
+  List<CourseLastSeen> getLastSeenCourses(List<MenuWeek> menuWeeks) {
+    List<CourseLastSeen> lastSeenCourses = [];
+
+    DateFormat format = DateFormat("dd.MM.yyyy");
+    for (var week in menuWeeks) {
+      for (var day in week.menuDays) {
+        for (var course in day.menuCourses) {
+          CourseLastSeen? lsCourse = lastSeenCourses.firstWhereOrNull((e) => e.course.courseName == course.courseName);
+          DateTime dateTime =
+              format.parse(day.dayName.substring(3, day.dayName.length) + week.documentSaveDate.year.toString());
+          int daysSince = DateTime.now().difference(dateTime).inDays;
+          if (lsCourse == null) {
+            lastSeenCourses.add(CourseLastSeen(
+              course: course,
+              days: daysSince,
+            ));
+          } else {
+            lastSeenCourses[lastSeenCourses.indexOf(lsCourse)].days = daysSince;
+          }
+        }
+      }
+    }
+
+    lastSeenCourses.sort((a, b) => b.days.compareTo(a.days));
+
+    return lastSeenCourses;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -128,7 +177,16 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                     return Column(
                       children: [
                         MostLikedCoursesCard(menuCourses: snapshot.data!.menuCourses),
-                        FrequentCoursesCard(frequentCourses: snapshot.data!.frequentCourses),
+                        CoursesSummaryCard(
+                          title: "most_frequent_courses".tr(),
+                          type: _CourseType.frequent,
+                          coursesTuple: snapshot.data!.frequentCourses.map((e) => Tuple2(e.course, e.count)).toList(),
+                        ),
+                        CoursesSummaryCard(
+                          title: "longest_wait_courses".tr(),
+                          type: _CourseType.longestWait,
+                          coursesTuple: snapshot.data!.lastSeenCourses.map((e) => Tuple2(e.course, e.days)).toList(),
+                        ),
                       ],
                     );
                   } else if (snapshot.hasError) {
@@ -628,13 +686,17 @@ class _AllVotedCoursesState extends State<AllVotedCourses> {
   }
 }
 
-class FrequentCoursesCard extends StatelessWidget {
-  const FrequentCoursesCard({
+class CoursesSummaryCard extends StatelessWidget {
+  const CoursesSummaryCard({
     super.key,
-    required this.frequentCourses,
+    required this.title,
+    required this.type,
+    required this.coursesTuple,
   });
 
-  final List<FrequentCourse> frequentCourses;
+  final String title;
+  final _CourseType type;
+  final List<Tuple2<MenuCourse, int>> coursesTuple;
 
   @override
   Widget build(BuildContext context) {
@@ -642,10 +704,10 @@ class FrequentCoursesCard extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "most_frequent_courses",
-            style: TextStyle(fontSize: 20),
-          ).tr(),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 20),
+          ),
         ),
         Card(
           child: Padding(
@@ -657,7 +719,7 @@ class FrequentCoursesCard extends StatelessWidget {
                   itemCount: 6,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    FrequentCourse course = frequentCourses[index];
+                    Tuple2<MenuCourse, int> courseTuple = coursesTuple[index];
 
                     if (index.isOdd) {
                       return const Divider();
@@ -665,7 +727,11 @@ class FrequentCoursesCard extends StatelessWidget {
 
                     index = index ~/ 2;
 
-                    return FrequentCourseWidget(frequentCourse: course, index: index);
+                    return CourseRankCountWidget(
+                      course: courseTuple.item1,
+                      count: courseTuple.item2,
+                      index: index,
+                    );
                   },
                 ),
                 ElevatedButton(
@@ -673,7 +739,10 @@ class FrequentCoursesCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AllFrequentCourses(frequentCourses: frequentCourses),
+                        builder: (context) => AllCoursesListView(
+                          title: title,
+                          coursesTuple: coursesTuple,
+                        ),
                       ),
                     );
                   },
@@ -688,10 +757,11 @@ class FrequentCoursesCard extends StatelessWidget {
   }
 }
 
-class FrequentCourseWidget extends StatelessWidget {
-  const FrequentCourseWidget({super.key, required this.frequentCourse, required this.index});
+class CourseRankCountWidget extends StatelessWidget {
+  const CourseRankCountWidget({super.key, required this.course, required this.count, required this.index});
 
-  final FrequentCourse frequentCourse;
+  final MenuCourse course;
+  final int count;
   final int index;
 
   ImageIcon getRankIcon(int rank, String courseType) {
@@ -733,18 +803,18 @@ class FrequentCourseWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          getRankIcon(index, frequentCourse.course.courseType),
+          getRankIcon(index, course.courseType),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(
-                frequentCourse.course.courseName,
+                course.courseName,
                 style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
           Text(
-            frequentCourse.count.toString(),
+            count.toString(),
             style: const TextStyle(fontSize: 16),
           ),
         ],
@@ -753,29 +823,30 @@ class FrequentCourseWidget extends StatelessWidget {
   }
 }
 
-class AllFrequentCourses extends StatefulWidget {
-  const AllFrequentCourses({super.key, required this.frequentCourses});
+class AllCoursesListView extends StatefulWidget {
+  const AllCoursesListView({super.key, required this.title, required this.coursesTuple});
 
-  final List<FrequentCourse> frequentCourses;
+  final String title;
+  final List<Tuple2<MenuCourse, int>> coursesTuple;
 
   @override
-  State<AllFrequentCourses> createState() => _AllFrequentCoursesState();
+  State<AllCoursesListView> createState() => _AllCoursesListViewState();
 }
 
-class _AllFrequentCoursesState extends State<AllFrequentCourses> {
-  List<FrequentCourse> filteredCourses = [];
+class _AllCoursesListViewState extends State<AllCoursesListView> {
+  List<Tuple2<MenuCourse, int>> filteredCourses = [];
   TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredCourses = widget.frequentCourses;
+    filteredCourses = widget.coursesTuple;
   }
 
   void searchCourse(String searchTerm) {
     setState(() {
-      filteredCourses = widget.frequentCourses
-          .where((element) => element.course.courseName.toLowerCase().contains(searchTerm.toLowerCase()))
+      filteredCourses = widget.coursesTuple
+          .where((element) => element.item1.courseName.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
     });
   }
@@ -784,7 +855,7 @@ class _AllFrequentCoursesState extends State<AllFrequentCourses> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("most_frequent_courses").tr(),
+        title: Text(widget.title),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
@@ -811,12 +882,16 @@ class _AllFrequentCoursesState extends State<AllFrequentCourses> {
                 shrinkWrap: true,
                 itemCount: filteredCourses.length,
                 itemBuilder: (context, index) {
-                  FrequentCourse course = filteredCourses[index];
+                  Tuple2<MenuCourse, int> courseTuple = filteredCourses[index];
 
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: FrequentCourseWidget(frequentCourse: course, index: index),
+                      child: CourseRankCountWidget(
+                        course: courseTuple.item1,
+                        count: courseTuple.item2,
+                        index: index,
+                      ),
                     ),
                   );
                 },
