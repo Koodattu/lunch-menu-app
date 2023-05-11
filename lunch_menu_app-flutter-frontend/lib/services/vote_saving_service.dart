@@ -87,6 +87,19 @@ class VoteSavingService {
     return savedVote;
   }
 
+  Future<bool> saveVoteRanked(CourseVote winner, CourseVote loser) async {
+    var response = await _networkingService.postToApi(RestApiType.voteRanked, [winner, loser]);
+    if (response is List<CourseVote>) {
+      SnackBarService().showSnackBar("vote_succesful".tr(), Colors.green.shade600, Colors.white, Icons.done, true);
+
+      return true;
+    }
+
+    SnackBarService().showSnackBar("vote_error".tr(), Colors.red, Colors.black, Icons.error, true);
+
+    return false;
+  }
+
   Future<String> get _localPath async {
     final Directory directory = await getApplicationDocumentsDirectory();
 

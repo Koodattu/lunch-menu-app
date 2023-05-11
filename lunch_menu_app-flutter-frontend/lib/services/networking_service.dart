@@ -53,6 +53,8 @@ class NetworkingService {
         return "/lunch-menu-course-votes/vote";
       case RestApiType.mostFrequentCourses:
         return "/lunch-menu-courses/frequent";
+      case RestApiType.voteRanked:
+        return "/lunch-menu-course-votes/ranked";
     }
   }
 
@@ -79,6 +81,8 @@ class NetworkingService {
         return courseVoteFromJson(json);
       case RestApiType.mostFrequentCourses:
         return frequentCoursesListFromJson(json);
+      case RestApiType.voteRanked:
+        return courseVoteListFromJson(json);
     }
   }
 
@@ -94,6 +98,8 @@ class NetworkingService {
         return courseVoteToJson(object as CourseVote);
       case RestApiType.mostFrequentCourses:
         return frequentCoursesListToJson(object as List<FrequentCourse>);
+      case RestApiType.voteRanked:
+        return courseVoteListToJson(object as List<CourseVote>);
     }
   }
 
@@ -115,6 +121,9 @@ class NetworkingService {
         break;
       case RestApiType.mostFrequentCourses:
         data = await rootBundle.loadString("assets/mock_data/frequent_courses.json");
+        break;
+      case RestApiType.voteRanked:
+        data = await rootBundle.loadString("assets/mock_data/course_vote.json");
         break;
     }
 
@@ -163,4 +172,4 @@ class NetworkingService {
   }
 }
 
-enum RestApiType { latestMenuWeek, allMenuWeeks, allMenuCourses, vote, mostFrequentCourses }
+enum RestApiType { latestMenuWeek, allMenuWeeks, allMenuCourses, vote, mostFrequentCourses, voteRanked }

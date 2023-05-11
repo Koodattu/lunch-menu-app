@@ -56,5 +56,8 @@
     "current_week_not_yet_available": "Tämän viikon ruokalista ei ole vielä saatavilla.\nAlla on näytetty viimeisin ruokalista.",
     "most_frequent_courses": "Yleisimmät ruokalajit",
     "longest_wait_courses": "Pisin odotus (päivää sitten)",
-    "best_ranked_courses": "Arvostetuimmat ruokalajit"
+    "best_ranked_courses": "Arvostetuimmat ruokalajit",
+    "vs": "Vastaan",
+    "select_preferred_one": "Kummasta ruokalajista tykkäät enemmän?",
+    "you_have_voted_count": "Olet äänestänyt yhteensä {} kertaa"
 }

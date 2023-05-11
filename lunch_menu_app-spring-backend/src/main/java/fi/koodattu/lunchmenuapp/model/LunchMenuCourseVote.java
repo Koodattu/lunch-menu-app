@@ -26,6 +26,6 @@ public class LunchMenuCourseVote {
     @Column(name = "dislikes")
     private int dislikes;
 
-    @Column(name = "ranked", nullable = false)
+    @Column(name = "ranked")
     private int ranked;
 }

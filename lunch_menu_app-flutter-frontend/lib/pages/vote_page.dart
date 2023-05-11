@@ -555,7 +555,6 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CourseCardWidget(
                       menuCourse: currentCourse!,
-                      showVoteIcons: false,
                     ),
                   ),
                   Row(
@@ -727,7 +726,9 @@ class _CoursesSummaryCard extends StatelessWidget {
       return VoteOnCourses(menuCourses: coursesTuple.map((e) => e.item1).toList());
     }
     if (type == _CourseType.bestRanked) {
-      return Container();
+      return VoteOnCoursesRanked(
+        menuCourses: coursesTuple.map((e) => e.item1).toList(),
+      );
     }
 
     return Container();
@@ -947,6 +948,87 @@ class _AllCoursesListViewState extends State<AllCoursesListView> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class VoteOnCoursesRanked extends StatefulWidget {
+  const VoteOnCoursesRanked({super.key, required this.menuCourses});
+
+  final List<MenuCourse> menuCourses;
+
+  @override
+  State<VoteOnCoursesRanked> createState() => _VoteOnCoursesRankedState();
+}
+
+class _VoteOnCoursesRankedState extends State<VoteOnCoursesRanked> {
+  VoteSavingService voteSavingService = VoteSavingService();
+  int voteCounter = 0;
+  MenuCourse? firstCourse;
+  MenuCourse? secondCourse;
+
+  @override
+  void initState() {
+    super.initState();
+    _getNewRandomCourses();
+  }
+
+  void _getNewRandomCourses() {
+    setState(() {
+      firstCourse = _getRandomCourse(widget.menuCourses, firstCourse, secondCourse);
+      secondCourse = _getRandomCourse(widget.menuCourses, secondCourse, firstCourse);
+    });
+  }
+
+  MenuCourse _getRandomCourse(
+      List<MenuCourse> menuCourses, MenuCourse? currentMenuCourse, MenuCourse? otherMenuCourse) {
+    Random random = Random();
+    MenuCourse randomMenuCourse = menuCourses[random.nextInt(menuCourses.length)];
+    currentMenuCourse ??= randomMenuCourse;
+    otherMenuCourse ??= randomMenuCourse;
+    while (randomMenuCourse == currentMenuCourse || randomMenuCourse == otherMenuCourse) {
+      randomMenuCourse = menuCourses[random.nextInt(menuCourses.length)];
+    }
+
+    return randomMenuCourse;
+  }
+
+  void voted(bool choseFirst) async {
+    CourseVote firstVote = CourseVote(id: firstCourse!.id, likes: 0, dislikes: 0, ranked: choseFirst ? 1 : -1);
+    CourseVote secondVote = CourseVote(id: secondCourse!.id, likes: 0, dislikes: 0, ranked: choseFirst ? -1 : 1);
+    bool result = choseFirst
+        ? await voteSavingService.saveVoteRanked(firstVote, secondVote)
+        : await voteSavingService.saveVoteRanked(secondVote, firstVote);
+    if (result) {
+      _getNewRandomCourses();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("vote_ranked").tr(),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            height: 400,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text("select_preferred_one", style: TextStyle(fontSize: 18)).tr(),
+                CourseCardWidget(menuCourse: firstCourse!, voidCallback: () => voted(true)),
+                const Text("vs", style: TextStyle(fontSize: 18)).tr(),
+                CourseCardWidget(menuCourse: secondCourse!, voidCallback: () => voted(false)),
+                const Text("you_have_voted_count", style: TextStyle(fontSize: 18)).tr(args: [voteCounter.toString()]),
+              ],
+            ),
+          ),
         ),
       ),
     );

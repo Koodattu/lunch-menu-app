@@ -324,6 +324,7 @@ public class LunchMenuTasks {
 
                 name = name.replaceAll("L, G", "L,G");
                 name = name.replaceAll("L,G", "L,G");
+                name = name.replaceAll("L ,G", "L,G");
                 name = name.replaceAll("L G", "L,G");
                 name = name.replaceAll("LG", "L,G");
                 name = name.replaceAll("G, L", "L,G");

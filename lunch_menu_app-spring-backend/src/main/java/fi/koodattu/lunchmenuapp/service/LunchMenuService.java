@@ -99,7 +99,11 @@ public class LunchMenuService {
 
         if (courseVoteWinner.isPresent() && courseVoteLoser.isPresent()){
             courseVoteWinner.get().setRanked(courseVoteWinner.get().getRanked() + votes.get(0).getRanked());
-            courseVoteLoser.get().setRanked(courseVoteLoser.get().getRanked() + votes.get(1).getRanked());
+            int newLoserRanked = courseVoteLoser.get().getRanked() + votes.get(1).getRanked();
+            if (newLoserRanked < 0) {
+                newLoserRanked = 0;
+            }
+            courseVoteLoser.get().setRanked(newLoserRanked);
 
             return courseVoteRepository.saveAll(Arrays.asList(courseVoteWinner.get(), courseVoteLoser.get()));
         }

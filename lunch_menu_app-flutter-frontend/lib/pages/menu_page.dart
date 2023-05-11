@@ -309,11 +309,13 @@ class DayMenuWidget extends StatelessWidget {
 class CourseCardWidget extends StatelessWidget {
   final MenuCourse menuCourse;
   final bool showVoteIcons;
+  final VoidCallback? voidCallback;
 
   const CourseCardWidget({
     super.key,
     required this.menuCourse,
-    required this.showVoteIcons,
+    this.showVoteIcons = false,
+    this.voidCallback,
   });
 
   ImageIcon _getMenuTypeIcon(String courseType) {
@@ -341,83 +343,90 @@ class CourseCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: showVoteIcons ? 100 : 80,
+      height: 100,
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _getMenuTypeIcon(menuCourse.courseType),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: InkWell(
+          onTap: voidCallback,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        menuCourse.courseName,
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      _getMenuTypeIcon(menuCourse.courseType),
                       const SizedBox(
-                        height: 4,
+                        width: 16,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (menuCourse.allergens.any((i) => i.allergenSymbol == "L"))
-                            Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                  color: Colors.blue,
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(2),
-                                  child: ImageIcon(
-                                    AssetImage(
-                                      'assets/icon_lactose_free.png',
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              menuCourse.courseName,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                if (menuCourse.allergens.any((i) => i.allergenSymbol == "L"))
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(8),
+                                        ),
+                                        color: Colors.blue,
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(2),
+                                        child: ImageIcon(
+                                          AssetImage(
+                                            'assets/icon_lactose_free.png',
+                                          ),
+                                          color: Colors.white,
+                                          size: 24,
+                                        ),
+                                      ),
                                     ),
-                                    color: Colors.white,
-                                    size: 24,
                                   ),
-                                ),
-                              ),
-                            ),
-                          if (menuCourse.allergens.any((i) => i.allergenSymbol == "G"))
-                            Container(
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                color: Colors.orange,
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(2),
-                                child: ImageIcon(
-                                  AssetImage(
-                                    'assets/icon_gluten_free.png',
+                                if (menuCourse.allergens.any((i) => i.allergenSymbol == "G"))
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                      color: Colors.orange,
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(2),
+                                      child: ImageIcon(
+                                        AssetImage(
+                                          'assets/icon_gluten_free.png',
+                                        ),
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                    ),
                                   ),
-                                  color: Colors.white,
-                                  size: 24,
-                                ),
-                              ),
+                              ],
                             ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
-              if (showVoteIcons) VoteIcons(menuCourseId: menuCourse.id),
-            ],
+                ),
+                if (showVoteIcons) VoteIcons(menuCourseId: menuCourse.id),
+              ],
+            ),
           ),
         ),
       ),

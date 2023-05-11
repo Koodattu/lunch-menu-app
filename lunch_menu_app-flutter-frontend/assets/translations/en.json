@@ -56,5 +56,8 @@
     "current_week_not_yet_available": "The menu for the current week is not yet available.\nBelow is shown the latest menu available.",
     "most_frequent_courses": "Most frequent courses",
     "longest_wait_courses": "Longest wait (days since)",
-    "best_ranked_courses": "Best ranked courses"
+    "best_ranked_courses": "Best ranked courses",
+    "vs": "Versus",
+    "select_preferred_one": "Which one of these two courses do you prefer?",
+    "you_have_voted_count": "You have voted a total of {} times"
 }
