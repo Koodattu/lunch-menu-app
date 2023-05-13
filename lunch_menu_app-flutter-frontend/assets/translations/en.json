@@ -59,5 +59,13 @@
     "best_ranked_courses": "Best ranked courses",
     "vs": "Versus",
     "select_preferred_one": "Which one of these two courses do you prefer?",
-    "you_have_voted_count": "You have voted a total of {} times"
+    "you_have_voted_count": "You have voted a total of {} times",
+    "maintenance": "Maintenance",
+    "open_app_maintenance": "Open application maintenance view",
+    "fetch_menu": "Fetch menu",
+    "force_fetch_menu": "Force the server to update menu",
+    "error": "Error occurred",
+    "success": "Success",
+    "clear_cache": "Clear cache",
+    "force_clear_cache": "Force clear endpoint caches"
 }

@@ -1,6 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lunch_menu_app/constants/app_settings_keys.dart';
+import 'package:flutter_lunch_menu_app/model/request_result.dart';
 import 'package:flutter_lunch_menu_app/oss_licenses.dart';
+import 'package:flutter_lunch_menu_app/services/networking_service.dart';
+import 'package:flutter_lunch_menu_app/services/snackbar_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
@@ -15,8 +19,11 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<MorePage> {
   late PackageInfo packageInfo;
+  SharedPreferences? preferences;
 
   bool loaded = false;
+  int tapCounter = 0;
+  bool showMaintenance = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -25,6 +32,25 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
   void initState() {
     super.initState();
     getPackageInfo();
+  }
+
+  void getPackageInfo() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    preferences = await SharedPreferences.getInstance();
+    showMaintenance = preferences!.getBool(appSettingMaintenance) ?? false;
+    setState(() {
+      loaded = true;
+    });
+  }
+
+  void appIconTapped() async {
+    tapCounter++;
+    if (tapCounter == 9) {
+      bool setValue = await preferences!.setBool(appSettingMaintenance, true);
+      setState(() {
+        showMaintenance = setValue;
+      });
+    }
   }
 
   void showLicensesDialog() {
@@ -110,13 +136,6 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
     );
   }
 
-  void getPackageInfo() async {
-    packageInfo = await PackageInfo.fromPlatform();
-    setState(() {
-      loaded = true;
-    });
-  }
-
   openFileInCloud() {
     launchUrlString(
       "https://docs.google.com/document/d/1ejQntnQPCHiajV_CLB6Un9AUElxzyOP4/",
@@ -146,6 +165,10 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
     await Navigator.push(context, MaterialPageRoute(builder: (context) => const AppSettingsView()));
   }
 
+  Future openAppMaintenance(BuildContext context) async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const AppMaintenanceView()));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -162,11 +185,14 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const SizedBox(
-                      width: 128,
-                      height: 128,
-                      child: Image(
-                        image: AssetImage("assets/app_icon.png"),
+                    GestureDetector(
+                      onTap: appIconTapped,
+                      child: const SizedBox(
+                        width: 128,
+                        height: 128,
+                        child: Image(
+                          image: AssetImage("assets/app_icon.png"),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -243,6 +269,13 @@ class _MorePageState extends State<MorePage> with AutomaticKeepAliveClientMixin<
                 subTitle: "show_licenses".tr(),
                 iconData: Icons.info,
               ),
+              if (showMaintenance)
+                InteractableCard(
+                  voidCallback: () => openAppMaintenance(context),
+                  title: "maintenance".tr(),
+                  subTitle: "open_app_maintenance".tr(),
+                  iconData: Icons.admin_panel_settings,
+                ),
             ],
           ),
         ],
@@ -344,13 +377,13 @@ class _AppSettingsViewState extends State<AppSettingsView> {
                     ),
                     SettingToggleCard(
                       settingTitle: "show_today".tr(),
-                      settingKey: "app_settings_menu_show_today",
+                      settingKey: appSettingShowToday,
                       sharedPreferences: _prefs,
                       defaultValue: true,
                     ),
                     SettingToggleCard(
                       settingTitle: "show_tomorrow".tr(),
-                      settingKey: "app_settings_menu_show_tomorrow",
+                      settingKey: appSettingShowTomorrow,
                       sharedPreferences: _prefs,
                       defaultValue: true,
                     ),
@@ -363,7 +396,7 @@ class _AppSettingsViewState extends State<AppSettingsView> {
                     ),
                     SettingToggleCard(
                       settingTitle: "use_mock_data".tr(),
-                      settingKey: "app_settings_use_mock_data",
+                      settingKey: appSettingMockData,
                       sharedPreferences: _prefs,
                       defaultValue: false,
                     ),
@@ -489,6 +522,110 @@ class _SettingToggleCardState extends State<SettingToggleCard> {
                   onChanged: ((value) => {}),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppMaintenanceView extends StatefulWidget {
+  const AppMaintenanceView({super.key});
+
+  @override
+  State<AppMaintenanceView> createState() => _AppMaintenanceViewState();
+}
+
+class _AppMaintenanceViewState extends State<AppMaintenanceView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("maintenance").tr(),
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(children: [
+          DynamicRequestCard(
+            title: "fetch_menu".tr(),
+            subtitle: "force_fetch_menu".tr(),
+            icon: Icons.update,
+            requestType: RestApiType.updateMenu,
+          ),
+          DynamicRequestCard(
+            title: "clear_cache".tr(),
+            subtitle: "force_clear_cache".tr(),
+            icon: Icons.cached,
+            requestType: RestApiType.clearCache,
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+class DynamicRequestCard extends StatefulWidget {
+  const DynamicRequestCard(
+      {super.key, required this.title, required this.subtitle, required this.icon, required this.requestType});
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final RestApiType requestType;
+
+  @override
+  State<DynamicRequestCard> createState() => _DynamicRequestCardState();
+}
+
+class _DynamicRequestCardState extends State<DynamicRequestCard> {
+  bool loading = false;
+
+  void sendGetRequest() async {
+    setState(() {
+      loading = true;
+    });
+
+    NetworkingService networkingService = NetworkingService();
+    var response = await networkingService.getFromApi(widget.requestType);
+
+    SnackBarService snackBarService = SnackBarService();
+    if (response is RequestResult && response.result) {
+      snackBarService.showSnackBar("success".tr(), Colors.green, Colors.white, Icons.check, true);
+    } else {
+      snackBarService.showSnackBar("error".tr(), Colors.red, Colors.black, Icons.error, true);
+    }
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: sendGetRequest,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    widget.subtitle,
+                    style: TextStyle(color: Colors.grey.shade500),
+                  ),
+                ],
+              ),
+              loading ? const CircularProgressIndicator() : Icon(widget.icon),
             ],
           ),
         ),

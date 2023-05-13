@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_lunch_menu_app/constants/app_settings_keys.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
@@ -41,8 +42,8 @@ class _MenuPageState extends State<MenuPage> with AutomaticKeepAliveClientMixin<
 
   _getSettings() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    showToday = sharedPreferences.getBool("app_settings_menu_show_today") ?? true;
-    showTomorrow = sharedPreferences.getBool("app_settings_menu_show_tomorrow") ?? true;
+    showToday = sharedPreferences.getBool(appSettingShowToday) ?? true;
+    showTomorrow = sharedPreferences.getBool(appSettingShowTomorrow) ?? true;
   }
 
   Future<MenuWeek> _fetchMenu() async {

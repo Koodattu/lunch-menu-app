@@ -3,11 +3,16 @@ package fi.koodattu.lunchmenuapp.service;
 import fi.koodattu.lunchmenuapp.model.*;
 import fi.koodattu.lunchmenuapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@CacheConfig(cacheNames = {"latestWeek", "allWeeks", "allCourses", "frequentCourses"})
 public class LunchMenuService {
 
     @Autowired
@@ -20,7 +25,10 @@ public class LunchMenuService {
     LunchMenuAllergenRepository menuAllergenRepository;
     @Autowired
     LunchMenuCourseVoteRepository courseVoteRepository;
+    @Autowired
+    CacheManager cacheManager;
 
+    @CacheEvict(allEntries = true)
     public LunchMenuWeek saveLunchMenuWeek(LunchMenuWeek lunchMenuWeek){
 
         for (LunchMenuDay day : lunchMenuWeek.getMenuDays()){
@@ -37,6 +45,9 @@ public class LunchMenuService {
                 course.setId(0);
 
                 LunchMenuCourseVote courseVote = new LunchMenuCourseVote();
+                courseVote.setRanked(new Random().nextInt(90) + 10);
+                courseVote.setLikes(new Random().nextInt(90) + 10);
+                courseVote.setDislikes(new Random().nextInt(90) + 10);
                 courseVote.setCourse(course);
                 course.setCourseVote(courseVote);
 
@@ -53,6 +64,7 @@ public class LunchMenuService {
         return menuWeekRepository.save(lunchMenuWeek);
     }
 
+    @Cacheable("allWeeks")
     public List<LunchMenuWeek> getAllWeeks(){
         return menuWeekRepository.findAll();
     }
@@ -61,6 +73,7 @@ public class LunchMenuService {
         return menuWeekRepository.findById(id);
     }
 
+    @Cacheable("latestWeek")
     public LunchMenuWeek getLatestWeek(){
         List<LunchMenuWeek> lunchMenuWeeks = menuWeekRepository.findAll();
 
@@ -72,6 +85,7 @@ public class LunchMenuService {
         }
     }
 
+    @Cacheable("allCourses")
     public List<LunchMenuCourse> getAllCourses(){
         return menuCourseRepository.findAll();
     }
@@ -80,6 +94,7 @@ public class LunchMenuService {
         return courseVoteRepository.findAll();
     }
 
+    @CacheEvict(value = "allCourses", allEntries = true)
     public LunchMenuCourseVote saveVote(LunchMenuCourseVote vote){
         Optional<LunchMenuCourseVote> courseVote = courseVoteRepository.findById(vote.getId());
 
@@ -93,6 +108,7 @@ public class LunchMenuService {
         return null;
     }
 
+    @CacheEvict(value = "allCourses", allEntries = true)
     public List<LunchMenuCourseVote> saveVoteRanked(List<LunchMenuCourseVote> votes){
         Optional<LunchMenuCourseVote> courseVoteWinner = courseVoteRepository.findById(votes.get(0).getId());
         Optional<LunchMenuCourseVote> courseVoteLoser = courseVoteRepository.findById(votes.get(1).getId());
@@ -111,6 +127,8 @@ public class LunchMenuService {
         return null;
     }
 
+
+    @Cacheable("frequentCourses")
     public List<LunchMenuFrequentCourse> getMostFrequentLunchMenuCourses(){
         List<LunchMenuDay> days = menuDayRepository.findAll();
         HashMap<Long, Integer> frequentCoursesMap = new HashMap<>();
@@ -137,5 +155,9 @@ public class LunchMenuService {
         Collections.reverse(frequentCourses);
 
         return frequentCourses;
+    }
+
+    public void clearAllCaches() {
+        cacheManager.getCacheNames().forEach(cache -> Objects.requireNonNull(cacheManager.getCache(cache)).clear());
     }
 }

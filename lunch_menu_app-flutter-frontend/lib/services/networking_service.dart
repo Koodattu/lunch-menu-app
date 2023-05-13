@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_lunch_menu_app/constants/app_settings_keys.dart';
 import 'package:flutter_lunch_menu_app/model/frequent_course.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
+import 'package:flutter_lunch_menu_app/model/request_result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 import "package:easy_localization/easy_localization.dart";
@@ -17,7 +19,7 @@ class NetworkingService {
   Future<Object> getFromApi(RestApiType type) async {
     Object? response;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getBool("app_settings_use_mock_data") ?? false) {
+    if (sharedPreferences.getBool(appSettingMockData) ?? false) {
       response = await _getMockData(type);
     } else {
       String apiPath = _getApiPath(type);
@@ -30,7 +32,7 @@ class NetworkingService {
   Future<Object> postToApi(RestApiType type, Object body) async {
     Object? response;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getBool("app_settings_use_mock_data") ?? false) {
+    if (sharedPreferences.getBool(appSettingMockData) ?? false) {
       response = await _getMockData(type);
     } else {
       String apiPath = _getApiPath(type);
@@ -55,6 +57,10 @@ class NetworkingService {
         return "/lunch-menu-courses/frequent";
       case RestApiType.voteRanked:
         return "/lunch-menu-course-votes/ranked";
+      case RestApiType.updateMenu:
+        return "/lunch-menu-maintenance/update-menu";
+      case RestApiType.clearCache:
+        return "/lunch-menu-maintenance/clear-cache";
     }
   }
 
@@ -83,6 +89,9 @@ class NetworkingService {
         return frequentCoursesListFromJson(json);
       case RestApiType.voteRanked:
         return courseVoteListFromJson(json);
+      case RestApiType.updateMenu:
+      case RestApiType.clearCache:
+        return requestResultFromJson(json);
     }
   }
 
@@ -100,6 +109,9 @@ class NetworkingService {
         return frequentCoursesListToJson(object as List<FrequentCourse>);
       case RestApiType.voteRanked:
         return courseVoteListToJson(object as List<CourseVote>);
+      case RestApiType.updateMenu:
+      case RestApiType.clearCache:
+        return requestResultToJson(object as RequestResult);
     }
   }
 
@@ -124,6 +136,10 @@ class NetworkingService {
         break;
       case RestApiType.voteRanked:
         data = await rootBundle.loadString("assets/mock_data/course_vote.json");
+        break;
+      case RestApiType.updateMenu:
+      case RestApiType.clearCache:
+        data = await rootBundle.loadString("assets/mock_data/request_result.json");
         break;
     }
 
@@ -172,4 +188,13 @@ class NetworkingService {
   }
 }
 
-enum RestApiType { latestMenuWeek, allMenuWeeks, allMenuCourses, vote, mostFrequentCourses, voteRanked }
+enum RestApiType {
+  latestMenuWeek,
+  allMenuWeeks,
+  allMenuCourses,
+  vote,
+  mostFrequentCourses,
+  voteRanked,
+  updateMenu,
+  clearCache
+}

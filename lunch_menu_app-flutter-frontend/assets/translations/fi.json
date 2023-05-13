@@ -59,5 +59,13 @@
     "best_ranked_courses": "Arvostetuimmat ruokalajit",
     "vs": "Vastaan",
     "select_preferred_one": "Kummasta ruokalajista tykkäät enemmän?",
-    "you_have_voted_count": "Olet äänestänyt yhteensä {} kertaa"
+    "you_have_voted_count": "Olet äänestänyt yhteensä {} kertaa",
+    "maintenance": "Ylläpito",
+    "open_app_maintenance": "Avaa sovelluksen ylläpitonäkymä",
+    "fetch_menu": "Hae ruokalista",
+    "force_fetch_menu": "Pakota palvelin hakemaan ruokalista",
+    "error": "Tapahtui virhe",
+    "success": "Onnistui",
+    "clear_cache": "Tyhjää välimuisti",
+    "force_clear_cache": "Tyhjennä palvelimen välimuisti"
 }

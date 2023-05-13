@@ -1,10 +1,8 @@
 package fi.koodattu.lunchmenuapp.controller;
 
-import fi.koodattu.lunchmenuapp.model.LunchMenuCourse;
-import fi.koodattu.lunchmenuapp.model.LunchMenuCourseVote;
-import fi.koodattu.lunchmenuapp.model.LunchMenuFrequentCourse;
-import fi.koodattu.lunchmenuapp.model.LunchMenuWeek;
+import fi.koodattu.lunchmenuapp.model.*;
 import fi.koodattu.lunchmenuapp.service.LunchMenuService;
+import fi.koodattu.lunchmenuapp.tasks.LunchMenuTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -124,6 +122,26 @@ public class LunchMenuController {
             return new ResponseEntity<>(frequentCourses, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/lunch-menu-maintenance/update-menu")
+    public ResponseEntity<?> getForceUpdateMenu() {
+        try {
+            LunchMenuTasks.FetchMenuFromDrive(lunchMenuService);
+            return new ResponseEntity<>(new RequestResult(true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RequestResult(false), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/lunch-menu-maintenance/clear-cache")
+    public ResponseEntity<?> getForceClearCache() {
+        try {
+            lunchMenuService.clearAllCaches();
+            return new ResponseEntity<>(new RequestResult(true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RequestResult(false), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
