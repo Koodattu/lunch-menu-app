@@ -2,9 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/constants/app_settings_keys.dart';
 import 'package:flutter_lunch_menu_app/model/request_result.dart';
+import 'package:flutter_lunch_menu_app/model/user_saved_vote_model.dart';
 import 'package:flutter_lunch_menu_app/oss_licenses.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/snackbar_service.dart';
+import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:store_redirect/store_redirect.dart';
@@ -400,6 +403,23 @@ class _AppSettingsViewState extends State<AppSettingsView> {
                       sharedPreferences: _prefs,
                       defaultValue: false,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        "reset_data".tr(),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    SettingButtonCard(
+                      settingTitle: "reset_votes".tr(),
+                      sharedPreferences: _prefs,
+                      type: "votes",
+                    ),
+                    SettingButtonCard(
+                      settingTitle: "reset_settings".tr(),
+                      sharedPreferences: _prefs,
+                      type: "settings",
+                    ),
                   ],
                 ),
               ),
@@ -520,6 +540,96 @@ class _SettingToggleCardState extends State<SettingToggleCard> {
                 child: Switch(
                   value: value,
                   onChanged: ((value) => {}),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SettingButtonCard extends StatelessWidget {
+  const SettingButtonCard({
+    super.key,
+    required this.settingTitle,
+    required this.sharedPreferences,
+    required this.type,
+  });
+
+  final String settingTitle;
+  final SharedPreferences sharedPreferences;
+  final String type;
+
+  void resetVotes(BuildContext context) async {
+    Provider.of<UserSavedVoteModel>(context, listen: false).removeAll();
+    await VoteSavingService().clearAllVotes();
+  }
+
+  void resetSettings() async {
+    await sharedPreferences.clear();
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: const Text("cancel").tr(),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("continue").tr(),
+      onPressed: () {
+        if (type == "votes") {
+          resetVotes(context);
+        }
+        if (type == "settings") {
+          resetSettings();
+        }
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: const Text("confirmation").tr(),
+      content: const Text("reset_confirmation").tr(args: [type.tr().toLowerCase()]),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: () => showAlertDialog(context),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                settingTitle,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(right: 16),
+                child: SizedBox(
+                  height: 40,
+                  child: Icon(
+                    Icons.warning,
+                    color: Colors.yellow,
+                  ),
                 ),
               ),
             ],

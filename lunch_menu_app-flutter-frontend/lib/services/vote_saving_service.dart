@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lunch_menu_app/model/user_saved_vote_model.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/snackbar_service.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
@@ -34,7 +35,8 @@ class VoteSavingService {
     return _writeFile(saved);
   }
 
-  Future<UserSavedVote> saveVote(bool votedLike, UserSavedVote savedVote, int menuCourseId) async {
+  Future<UserSavedVote> saveVote(bool votedLike, UserSavedVoteModel savedVotes, int menuCourseId) async {
+    UserSavedVote savedVote = savedVotes.findVoteById(menuCourseId);
     bool oldLikeState = savedVote.liked;
     bool oldDislikeState = savedVote.disliked;
 
@@ -76,6 +78,7 @@ class VoteSavingService {
 
     var response = await _networkingService.postToApi(RestApiType.vote, courseVote);
     if (response is CourseVote) {
+      savedVotes.changeVote(newSavedVote);
       SnackBarService().showSnackBar("vote_succesful".tr(), Colors.green.shade600, Colors.white, Icons.done, true);
 
       return UserSavedVote(id: savedVote.id, liked: newLikeState, disliked: newDislikeState);
@@ -98,6 +101,10 @@ class VoteSavingService {
     SnackBarService().showSnackBar("vote_error".tr(), Colors.red, Colors.black, Icons.error, true);
 
     return false;
+  }
+
+  Future<bool> clearAllVotes() async {
+    return await _deleteFile();
   }
 
   Future<String> get _localPath async {

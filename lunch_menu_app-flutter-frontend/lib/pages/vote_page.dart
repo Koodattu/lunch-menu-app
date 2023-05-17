@@ -1,14 +1,17 @@
 import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lunch_menu_app/model/course_last_seen.dart';
 import 'package:flutter_lunch_menu_app/model/frequent_course.dart';
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
+import 'package:flutter_lunch_menu_app/model/user_saved_vote_model.dart';
 import 'package:flutter_lunch_menu_app/pages/menu_page.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class _CourseLists {
@@ -187,11 +190,13 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
                           title: "most_liked_courses".tr(),
                           type: _CourseType.mostLiked,
                           coursesTuple: snapshot.data!.menuCourses.map((e) => Tuple2(e, 0)).toList(),
+                          callback: () => getAllMenuCourses(),
                         ),
                         _CoursesSummaryCard(
                           title: "best_ranked_courses".tr(),
                           type: _CourseType.bestRanked,
                           coursesTuple: _getSortedList(snapshot.data!.menuCourses),
+                          callback: () => getAllMenuCourses(),
                         ),
                         _CoursesSummaryCard(
                           title: "most_frequent_courses".tr(),
@@ -230,84 +235,6 @@ class _VotePageState extends State<VotePage> with AutomaticKeepAliveClientMixin<
           ),
         ),
       ),
-    );
-  }
-}
-
-class MostLikedCoursesCard extends StatelessWidget {
-  const MostLikedCoursesCard({
-    super.key,
-    required this.menuCourses,
-  });
-
-  final List<MenuCourse> menuCourses;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "most_liked_courses",
-            style: TextStyle(fontSize: 20),
-          ).tr(),
-        ),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    MenuCourse menuCourse = menuCourses[index];
-
-                    if (index.isOdd) {
-                      return const Divider();
-                    }
-
-                    index = index ~/ 2;
-
-                    return CourseLikesDislikes(menuCourse: menuCourse, index: index);
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllMostLikedCourses(courses: menuCourses),
-                          ),
-                        );
-                      },
-                      child: const Text("show_all").tr(),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VoteOnCourses(
-                              menuCourses: menuCourses,
-                            ),
-                          ),
-                        );
-                      },
-                      child: const Text("vote").tr(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -478,12 +405,12 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
     return randomMenuCourse;
   }
 
-  void vote(bool? vote, MenuCourse courseVotedOn) async {
+  void vote(UserSavedVoteModel votes, bool? vote, MenuCourse courseVotedOn) async {
     bool savingResult = false;
 
     if (vote == true || vote == false) {
       UserSavedVote savedVote = await voteSavingService.getVote(courseVotedOn.id);
-      UserSavedVote newSavedVote = await voteSavingService.saveVote(vote!, savedVote, courseVotedOn.id);
+      UserSavedVote newSavedVote = await voteSavingService.saveVote(vote!, votes, courseVotedOn.id);
       savingResult = savedVote != newSavedVote;
     }
 
@@ -557,25 +484,29 @@ class _VoteOnCoursesState extends State<VoteOnCourses> {
                       menuCourse: currentCourse!,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      BigVoteButton(
-                        callback: () => vote(true, currentCourse!),
-                        color: Colors.green,
-                        icon: Icons.thumb_up_outlined,
-                      ),
-                      BigVoteButton(
-                        callback: () => vote(null, currentCourse!),
-                        color: Colors.yellow,
-                        icon: Icons.skip_next,
-                      ),
-                      BigVoteButton(
-                        callback: () => vote(false, currentCourse!),
-                        color: Colors.red,
-                        icon: Icons.thumb_down_outlined,
-                      ),
-                    ],
+                  Consumer<UserSavedVoteModel>(
+                    builder: (context, votes, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          BigVoteButton(
+                            callback: () => vote(votes, true, currentCourse!),
+                            color: Colors.green,
+                            icon: Icons.thumb_up_outlined,
+                          ),
+                          BigVoteButton(
+                            callback: () => vote(votes, null, currentCourse!),
+                            color: Colors.yellow,
+                            icon: Icons.skip_next,
+                          ),
+                          BigVoteButton(
+                            callback: () => vote(votes, false, currentCourse!),
+                            color: Colors.red,
+                            icon: Icons.thumb_down_outlined,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const Text("left_to_vote_on").tr(args: [coursesToVote.length.toString()]),
                   ElevatedButton(
@@ -707,11 +638,13 @@ class _CoursesSummaryCard extends StatelessWidget {
     required this.title,
     required this.type,
     required this.coursesTuple,
+    this.callback,
   });
 
   final String title;
   final _CourseType type;
   final List<Tuple2<MenuCourse, int>> coursesTuple;
+  final AsyncCallback? callback;
 
   Widget _getListRouteWidget(_CourseType type, String title, List<Tuple2<MenuCourse, int>> coursesTuple) {
     if (type == _CourseType.mostLiked) {
@@ -792,7 +725,7 @@ class _CoursesSummaryCard extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => _getVoteRouteWidget(type),
                             ),
-                          );
+                          ).then((value) => callback!());
                         },
                         child: const Text("vote").tr(),
                       ),

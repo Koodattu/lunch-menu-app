@@ -34,7 +34,7 @@
     "send_feedback": "Send feedback about the application",
     "rate_application": "Rate application",
     "open_store_page": "Open the application in Play Store",
-    "oss_licenses": "OSS licenses",
+    "oss_licenses": "Licenses",
     "show_licenses": "Show third party licenses",
     "feedback_email_subject": "Feedback: Lunch Menu -Application",
     "close": "Close",
@@ -67,5 +67,13 @@
     "error": "Error occurred",
     "success": "Success",
     "clear_cache": "Clear cache",
-    "force_clear_cache": "Force clear endpoint caches"
+    "force_clear_cache": "Force clear endpoint caches",
+    "reset_data": "Application data",
+    "reset_votes": "Reset course votes",
+    "reset_settings": "Reset app settings",
+    "confirmation": "Confirmation",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "reset_confirmation": "Are you sure you want to reset {}?",
+    "votes": "Votes"
 }

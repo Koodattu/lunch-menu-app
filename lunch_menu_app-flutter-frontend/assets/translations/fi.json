@@ -34,7 +34,7 @@
     "send_feedback": "Anna palautetta sovelluksesta",
     "rate_application": "Arvostele sovellus",
     "open_store_page": "Avaa sovellus Play Storessa",
-    "oss_licenses": "ALO Lisenssit",
+    "oss_licenses": "Lisenssit",
     "show_licenses": "Näytä kolmannen osapuolen lisenssit",
     "feedback_email_subject": "Palaute: Lounas Ruokalista -Sovellus",
     "close": "Sulje",
@@ -67,5 +67,13 @@
     "error": "Tapahtui virhe",
     "success": "Onnistui",
     "clear_cache": "Tyhjää välimuisti",
-    "force_clear_cache": "Tyhjennä palvelimen välimuisti"
+    "force_clear_cache": "Tyhjennä palvelimen välimuisti",
+    "reset_data": "Sovelluksen tiedot",
+    "reset_votes": "Nollaa antamasi äänet",
+    "reset_settings": "Nollaa sovelluksen asetukset",
+    "confirmation": "Varmistus",
+    "cancel": "Peruuta",
+    "continue": "Jatka",
+    "reset_confirmation": "Oletko varma että tahdot nollata {}?",
+    "votes": "Äänet"
 }

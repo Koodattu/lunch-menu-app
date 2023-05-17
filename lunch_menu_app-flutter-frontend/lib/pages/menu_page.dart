@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_lunch_menu_app/constants/app_settings_keys.dart';
 import 'package:flutter_lunch_menu_app/model/user_saved_vote.dart';
+import 'package:flutter_lunch_menu_app/model/user_saved_vote_model.dart';
 import 'package:flutter_lunch_menu_app/services/networking_service.dart';
 import 'package:flutter_lunch_menu_app/services/vote_saving_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_lunch_menu_app/model/menu_week.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuPage extends StatefulWidget {
@@ -449,63 +451,54 @@ class VoteIcons extends StatefulWidget {
 
 class _VoteIconsState extends State<VoteIcons> {
   VoteSavingService voteSavingService = VoteSavingService();
-  UserSavedVote savedVote = UserSavedVote(id: 0, liked: false, disliked: false);
 
-  @override
-  void initState() {
-    super.initState();
-
-    _readSavedVotes();
-  }
-
-  void _readSavedVotes() async {
-    UserSavedVote newSavedVote = await voteSavingService.getVote(widget.menuCourseId);
-
-    setState(() {
-      savedVote = newSavedVote;
-    });
-  }
-
-  void _voteButtonPressed(bool votedLike) async {
-    UserSavedVote newSavedVote = await voteSavingService.saveVote(votedLike, savedVote, widget.menuCourseId);
-
+  void _voteButtonPressed(UserSavedVoteModel votes, bool votedLike) async {
+    UserSavedVote savedVote = votes.findVoteById(widget.menuCourseId);
+    UserSavedVote newSavedVote = await voteSavingService.saveVote(votedLike, votes, widget.menuCourseId);
+/*
     if (newSavedVote != savedVote) {
       setState(() {
         savedVote = newSavedVote;
       });
-    }
+    }*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 36,
-          height: 36,
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => _voteButtonPressed(true),
-            icon: Icon(
-              savedVote.liked ? Icons.thumb_up : Icons.thumb_up_outlined,
-              color: Colors.green,
+    return Consumer<UserSavedVoteModel>(
+      builder: (context, votes, child) {
+        UserSavedVote savedVote = votes.findVoteById(widget.menuCourseId);
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 36,
+              height: 36,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => _voteButtonPressed(votes, true),
+                icon: Icon(
+                  savedVote.liked ? Icons.thumb_up : Icons.thumb_up_outlined,
+                  color: Colors.green,
+                ),
+              ),
             ),
-          ),
-        ),
-        SizedBox(
-          width: 36,
-          height: 36,
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => _voteButtonPressed(false),
-            icon: Icon(
-              savedVote.disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
-              color: Colors.red,
+            SizedBox(
+              width: 36,
+              height: 36,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => _voteButtonPressed(votes, false),
+                icon: Icon(
+                  savedVote.disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+                  color: Colors.red,
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
