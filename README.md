@@ -1,4 +1,5 @@
 <div align="center">
+    <br />
     <img src="https://i.imgur.com/YzqFU2A.png" alt="Logo" width="80" height="80">
 
   <h3 align="center">Lunch Menu Application</h3>
