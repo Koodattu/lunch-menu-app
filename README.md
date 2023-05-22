@@ -1,8 +1,16 @@
-# Lunch Menu Application
+<div align="center">
+    <img src="https://i.imgur.com/YzqFU2A.png" alt="Logo" width="80" height="80">
 
-A lunch menu application with flutter and spring boot. 
+  <h3 align="center">Lunch Menu Application</h3>
 
-## Description
+  <p align="center">
+   A lunch menu application with flutter and spring boot. 
+    <br />
+    <br />
+  </p>
+</div>
+
+## Project description
 
 A full-stack application for viewing a staff restaurant's weekly lunch menu with extra features, like voting and history of past weeks. 
 Frontend made for mobile devices with flutter and written in dart. Backend made with spring boot and written in java. 
