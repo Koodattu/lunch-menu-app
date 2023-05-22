@@ -15,10 +15,10 @@
 A full-stack application for viewing a staff restaurant's weekly lunch menu with extra features, like voting and history of past weeks. 
 Frontend made for mobile devices with flutter and written in dart. Backend made with spring boot and written in java. 
 
+Backend fetches the menu as a Microsoft Word .doc file from Google Drive, parses it and saves it to a PostgreSQL database. The Google Drive file is checked a few times a day for updated menu. Communication between backend and frontend is handled via REST-api requests in json format.
+
 ![](https://i.imgur.com/90eGpV0.png)
 ![](https://i.imgur.com/ft5LKnI.png)
-
-Backend fetches the menu as a Microsoft Word .doc file from Google Drive, parses it and saves it to a PostgreSQL database. The Google Drive file is checked a few times a day for updated menu. Communication between backend and frontend is handled via REST-api requests in json format.
 
 ### Features
 * Current week's lunch menu
