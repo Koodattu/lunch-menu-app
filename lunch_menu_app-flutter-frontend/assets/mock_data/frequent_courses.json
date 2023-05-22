@@ -1,0 +1,2978 @@
+[
+    {
+        "course": {
+            "id": 1,
+            "courseName": "Salaattipöytä",
+            "courseType": "salad",
+            "allergens": [],
+            "courseVote": {
+                "id": 1,
+                "likes": 36,
+                "dislikes": 17,
+                "ranked": 10
+            }
+        },
+        "count": 112
+    },
+    {
+        "course": {
+            "id": 15,
+            "courseName": "Hernekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 15,
+                "likes": 96,
+                "dislikes": 59,
+                "ranked": 70
+            }
+        },
+        "count": 26
+    },
+    {
+        "course": {
+            "id": 6,
+            "courseName": "Antipastopöytä",
+            "courseType": "salad",
+            "allergens": [],
+            "courseVote": {
+                "id": 6,
+                "likes": 44,
+                "dislikes": 71,
+                "ranked": 81
+            }
+        },
+        "count": 22
+    },
+    {
+        "course": {
+            "id": 23,
+            "courseName": "Lohikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 23,
+                "likes": 47,
+                "dislikes": 13,
+                "ranked": 30
+            }
+        },
+        "count": 9
+    },
+    {
+        "course": {
+            "id": 30,
+            "courseName": "Pinaattikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 30,
+                "likes": 81,
+                "dislikes": 16,
+                "ranked": 91
+            }
+        },
+        "count": 8
+    },
+    {
+        "course": {
+            "id": 20,
+            "courseName": "Uunimakkaraa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 20,
+                "likes": 52,
+                "dislikes": 59,
+                "ranked": 75
+            }
+        },
+        "count": 8
+    },
+    {
+        "course": {
+            "id": 4,
+            "courseName": "Herkkusienikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 4,
+                "likes": 50,
+                "dislikes": 47,
+                "ranked": 69
+            }
+        },
+        "count": 8
+    },
+    {
+        "course": {
+            "id": 17,
+            "courseName": "Kanakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 17,
+                "likes": 60,
+                "dislikes": 54,
+                "ranked": 94
+            }
+        },
+        "count": 7
+    },
+    {
+        "course": {
+            "id": 12,
+            "courseName": "Makkarakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 12,
+                "likes": 44,
+                "dislikes": 75,
+                "ranked": 11
+            }
+        },
+        "count": 7
+    },
+    {
+        "course": {
+            "id": 10,
+            "courseName": "Tomaatti-linssikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 10,
+                "likes": 21,
+                "dislikes": 60,
+                "ranked": 77
+            }
+        },
+        "count": 6
+    },
+    {
+        "course": {
+            "id": 38,
+            "courseName": "Juuressosekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 38,
+                "likes": 72,
+                "dislikes": 88,
+                "ranked": 84
+            }
+        },
+        "count": 5
+    },
+    {
+        "course": {
+            "id": 34,
+            "courseName": "Kasslerpaistia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 34,
+                "likes": 31,
+                "dislikes": 65,
+                "ranked": 41
+            }
+        },
+        "count": 5
+    },
+    {
+        "course": {
+            "id": 32,
+            "courseName": "Lihapullakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 32,
+                "likes": 92,
+                "dislikes": 57,
+                "ranked": 81
+            }
+        },
+        "count": 5
+    },
+    {
+        "course": {
+            "id": 22,
+            "courseName": "Kasvispihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 22,
+                "likes": 43,
+                "dislikes": 66,
+                "ranked": 31
+            }
+        },
+        "count": 5
+    },
+    {
+        "course": {
+            "id": 91,
+            "courseName": "Kasvissosekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 91,
+                "likes": 30,
+                "dislikes": 97,
+                "ranked": 90
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 49,
+            "courseName": "Nakkikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 49,
+                "likes": 17,
+                "dislikes": 10,
+                "ranked": 68
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 40,
+            "courseName": "Borssikeittoa",
+            "courseType": "soup",
+            "allergens": [],
+            "courseVote": {
+                "id": 40,
+                "likes": 58,
+                "dislikes": 97,
+                "ranked": 93
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 33,
+            "courseName": "Broilerikiusausta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 33,
+                "likes": 66,
+                "dislikes": 17,
+                "ranked": 91
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 28,
+            "courseName": "Siskonmakkarakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 28,
+                "likes": 39,
+                "dislikes": 49,
+                "ranked": 98
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 26,
+            "courseName": "Aurajuustokeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 26,
+                "likes": 55,
+                "dislikes": 94,
+                "ranked": 27
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 16,
+            "courseName": "Sipulipihviä jauhelihasta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 16,
+                "likes": 51,
+                "dislikes": 40,
+                "ranked": 58
+            }
+        },
+        "count": 4
+    },
+    {
+        "course": {
+            "id": 110,
+            "courseName": "Lihakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 110,
+                "likes": 81,
+                "dislikes": 76,
+                "ranked": 33
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 98,
+            "courseName": "Makkarakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 98,
+                "likes": 94,
+                "dislikes": 97,
+                "ranked": 40
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 85,
+            "courseName": "Savulohisosekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 85,
+                "likes": 78,
+                "dislikes": 73,
+                "ranked": 74
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 76,
+            "courseName": "Katkarapukeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 76,
+                "likes": 20,
+                "dislikes": 32,
+                "ranked": 53
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 75,
+            "courseName": "Porsaanleikkeitä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 75,
+                "likes": 96,
+                "dislikes": 89,
+                "ranked": 50
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 74,
+            "courseName": "Juustokeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 74,
+                "likes": 38,
+                "dislikes": 51,
+                "ranked": 63
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 67,
+            "courseName": "Kieviläistä kanaa",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 67,
+                "likes": 18,
+                "dislikes": 54,
+                "ranked": 20
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 56,
+            "courseName": "Lihamureketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 56,
+                "likes": 48,
+                "dislikes": 79,
+                "ranked": 57
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 51,
+            "courseName": "Lihamakaronilaatikkoa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 51,
+                "likes": 101,
+                "dislikes": 27,
+                "ranked": 27
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 18,
+            "courseName": "Possun ulkofileetä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 18,
+                "likes": 36,
+                "dislikes": 57,
+                "ranked": 14
+            }
+        },
+        "count": 3
+    },
+    {
+        "course": {
+            "id": 126,
+            "courseName": "Suljettu",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 126,
+                "likes": 36,
+                "dislikes": 28,
+                "ranked": 30
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 112,
+            "courseName": "Lammas-kaalikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 112,
+                "likes": 80,
+                "dislikes": 77,
+                "ranked": 62
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 104,
+            "courseName": "Pastaa bolognese",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 104,
+                "likes": 21,
+                "dislikes": 72,
+                "ranked": 91
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 96,
+            "courseName": "Linssikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 96,
+                "likes": 101,
+                "dislikes": 31,
+                "ranked": 41
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 94,
+            "courseName": "Janssoninkiusausta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 94,
+                "likes": 14,
+                "dislikes": 11,
+                "ranked": 80
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 90,
+            "courseName": "Karjalanpaistia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 90,
+                "likes": 39,
+                "dislikes": 33,
+                "ranked": 64
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 88,
+            "courseName": "Broilerpataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 88,
+                "likes": 14,
+                "dislikes": 34,
+                "ranked": 48
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 86,
+            "courseName": "Lasagnea",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 86,
+                "likes": 85,
+                "dislikes": 71,
+                "ranked": 56
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 83,
+            "courseName": "Makkarapihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 83,
+                "likes": 37,
+                "dislikes": 55,
+                "ranked": 70
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 78,
+            "courseName": "Jauhelihakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 78,
+                "likes": 60,
+                "dislikes": 21,
+                "ranked": 47
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 77,
+            "courseName": "Palapaistia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 77,
+                "likes": 73,
+                "dislikes": 32,
+                "ranked": 83
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 68,
+            "courseName": "Häränmurekepihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 68,
+                "likes": 24,
+                "dislikes": 47,
+                "ranked": 30
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 66,
+            "courseName": "Pyttipannua",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 66,
+                "likes": 41,
+                "dislikes": 34,
+                "ranked": 35
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 63,
+            "courseName": "Kaali-jauhelihakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 63,
+                "likes": 97,
+                "dislikes": 50,
+                "ranked": 62
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 50,
+            "courseName": "Kaalikääryleitä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 50,
+                "likes": 49,
+                "dislikes": 56,
+                "ranked": 80
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 48,
+            "courseName": "Kinkkukiusausta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 48,
+                "likes": 80,
+                "dislikes": 28,
+                "ranked": 69
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 42,
+            "courseName": "Porkkanasosekeittoa",
+            "courseType": "soup",
+            "allergens": [],
+            "courseVote": {
+                "id": 42,
+                "likes": 50,
+                "dislikes": 96,
+                "ranked": 85
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 41,
+            "courseName": "Aurajuusto-härkäruukkua",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 41,
+                "likes": 49,
+                "dislikes": 98,
+                "ranked": 98
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 39,
+            "courseName": "Possun sisäfilettä",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 39,
+                "likes": 60,
+                "dislikes": 44,
+                "ranked": 26
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 37,
+            "courseName": "Liha-kaalilaatikkoa",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 37,
+                "likes": 43,
+                "dislikes": 26,
+                "ranked": 88
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 36,
+            "courseName": "Chili-kookos broileria",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 36,
+                "likes": 57,
+                "dislikes": 22,
+                "ranked": 23
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 35,
+            "courseName": "Kebabkastiketta riisiä",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 35,
+                "likes": 29,
+                "dislikes": 36,
+                "ranked": 79
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 29,
+            "courseName": "Lohimureketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 29,
+                "likes": 67,
+                "dislikes": 56,
+                "ranked": 53
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 24,
+            "courseName": "Lindströminpihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 24,
+                "likes": 85,
+                "dislikes": 66,
+                "ranked": 78
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 14,
+            "courseName": "Broilerpihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 14,
+                "likes": 70,
+                "dislikes": 77,
+                "ranked": 37
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 13,
+            "courseName": "Jauhelihakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 13,
+                "likes": 17,
+                "dislikes": 49,
+                "ranked": 52
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 11,
+            "courseName": "Makkara-pekoni stroganoff",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 11,
+                "likes": 68,
+                "dislikes": 16,
+                "ranked": 76
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 9,
+            "courseName": "SULJETTU",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 9,
+                "likes": 68,
+                "dislikes": 63,
+                "ranked": 19
+            }
+        },
+        "count": 2
+    },
+    {
+        "course": {
+            "id": 133,
+            "courseName": "HYVÄÄ JOULUA",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 133,
+                "likes": 93,
+                "dislikes": 38,
+                "ranked": 75
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 132,
+            "courseName": "Kalkkunanrintaa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 132,
+                "likes": 50,
+                "dislikes": 89,
+                "ranked": 32
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 131,
+            "courseName": "Possun paistia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 131,
+                "likes": 34,
+                "dislikes": 51,
+                "ranked": 28
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 130,
+            "courseName": "JOULULOUNAS",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 130,
+                "likes": 68,
+                "dislikes": 35,
+                "ranked": 16
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 129,
+            "courseName": "Pippuri-härkäruukkua",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 129,
+                "likes": 101,
+                "dislikes": 93,
+                "ranked": 37
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 128,
+            "courseName": "Broileriwokkia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 128,
+                "likes": 82,
+                "dislikes": 99,
+                "ranked": 24
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 127,
+            "courseName": "Kaali-jauhelihalaatikkoa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 127,
+                "likes": 71,
+                "dislikes": 79,
+                "ranked": 73
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 125,
+            "courseName": "Possunpaistia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 125,
+                "likes": 25,
+                "dislikes": 53,
+                "ranked": 67
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 124,
+            "courseName": "Possun kassleria",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 124,
+                "likes": 22,
+                "dislikes": 58,
+                "ranked": 42
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 123,
+            "courseName": "Harissa linssikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 123,
+                "likes": 37,
+                "dislikes": 37,
+                "ranked": 17
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 122,
+            "courseName": "Thaikanaa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 122,
+                "likes": 17,
+                "dislikes": 21,
+                "ranked": 73
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 121,
+            "courseName": "Parsakaalisosekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 121,
+                "likes": 90,
+                "dislikes": 18,
+                "ranked": 95
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 120,
+            "courseName": "Uunikalaa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 120,
+                "likes": 26,
+                "dislikes": 68,
+                "ranked": 27
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 119,
+            "courseName": "Kanakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 119,
+                "likes": 62,
+                "dislikes": 33,
+                "ranked": 79
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 118,
+            "courseName": "Lammaskaalikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 118,
+                "likes": 29,
+                "dislikes": 21,
+                "ranked": 49
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 117,
+            "courseName": "Spaghettia bolognese",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 117,
+                "likes": 85,
+                "dislikes": 17,
+                "ranked": 12
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 116,
+            "courseName": "Härkäruukkua",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 116,
+                "likes": 99,
+                "dislikes": 41,
+                "ranked": 21
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 115,
+            "courseName": "Porkkana-kookoskeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 115,
+                "likes": 20,
+                "dislikes": 44,
+                "ranked": 90
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 114,
+            "courseName": "Pippurihärkäruukkua",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 114,
+                "likes": 76,
+                "dislikes": 21,
+                "ranked": 75
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 113,
+            "courseName": "Juustokuorrutettua lihamureketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 113,
+                "likes": 49,
+                "dislikes": 80,
+                "ranked": 48
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 111,
+            "courseName": "Broilerin koipireisiä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 111,
+                "likes": 71,
+                "dislikes": 85,
+                "ranked": 9
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 109,
+            "courseName": "Chorizopyöryköitä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 109,
+                "likes": 35,
+                "dislikes": 19,
+                "ranked": 96
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 108,
+            "courseName": "Possunposkea",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 108,
+                "likes": 28,
+                "dislikes": 81,
+                "ranked": 33
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 107,
+            "courseName": "Gulassikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 107,
+                "likes": 37,
+                "dislikes": 80,
+                "ranked": 99
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 106,
+            "courseName": "Lihapulla",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 106,
+                "likes": 15,
+                "dislikes": 41,
+                "ranked": 11
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 105,
+            "courseName": "Kukkoa viinissä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 105,
+                "likes": 21,
+                "dislikes": 62,
+                "ranked": 28
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 103,
+            "courseName": "Chorizopyörykkäkastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 103,
+                "likes": 83,
+                "dislikes": 69,
+                "ranked": 46
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 102,
+            "courseName": "Possu stroganoff",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 102,
+                "likes": 59,
+                "dislikes": 88,
+                "ranked": 49
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 101,
+            "courseName": "Savuporokeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 101,
+                "likes": 75,
+                "dislikes": 84,
+                "ranked": 89
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 100,
+            "courseName": "Hapanimelää possupataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 100,
+                "likes": 32,
+                "dislikes": 51,
+                "ranked": 16
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 99,
+            "courseName": "Pastaa bolognaise",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 99,
+                "likes": 43,
+                "dislikes": 11,
+                "ranked": 50
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 97,
+            "courseName": "Jauhelihapihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 97,
+                "likes": 22,
+                "dislikes": 23,
+                "ranked": 48
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 95,
+            "courseName": "Jauheliha-kaalilaatikkoa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 95,
+                "likes": 13,
+                "dislikes": 36,
+                "ranked": 54
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 93,
+            "courseName": "Bulgogipataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 93,
+                "likes": 100,
+                "dislikes": 84,
+                "ranked": 72
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 92,
+            "courseName": "Possunfileetä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 92,
+                "likes": 72,
+                "dislikes": 51,
+                "ranked": 71
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 89,
+            "courseName": "Kebabkiusausta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 89,
+                "likes": 70,
+                "dislikes": 40,
+                "ranked": 45
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 87,
+            "courseName": "Nakkikastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 87,
+                "likes": 18,
+                "dislikes": 41,
+                "ranked": 28
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 84,
+            "courseName": "Broilerin reisikoipia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 84,
+                "likes": 59,
+                "dislikes": 26,
+                "ranked": 24
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 82,
+            "courseName": "Unkarilainen jauhelihakeitto",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 82,
+                "likes": 86,
+                "dislikes": 18,
+                "ranked": 24
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 81,
+            "courseName": "Parmesan-broileripihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 81,
+                "likes": 18,
+                "dislikes": 17,
+                "ranked": 97
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 80,
+            "courseName": "Bataattisose-kookoskeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 80,
+                "likes": 43,
+                "dislikes": 56,
+                "ranked": 66
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 79,
+            "courseName": "Korealaista broilerpataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 79,
+                "likes": 19,
+                "dislikes": 72,
+                "ranked": 78
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 73,
+            "courseName": "Kermaista pippurikastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 73,
+                "likes": 82,
+                "dislikes": 52,
+                "ranked": 66
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 72,
+            "courseName": "Kokonaisena paistettua possun ulkofileetä",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 72,
+                "likes": 78,
+                "dislikes": 41,
+                "ranked": 84
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 71,
+            "courseName": "Broiler-aurajuustoruukkua",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 71,
+                "likes": 33,
+                "dislikes": 79,
+                "ranked": 12
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 70,
+            "courseName": "Hauki frigadellikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 70,
+                "likes": 48,
+                "dislikes": 77,
+                "ranked": 61
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 69,
+            "courseName": "Kirjolohimurekepihviä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 69,
+                "likes": 32,
+                "dislikes": 24,
+                "ranked": 59
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 65,
+            "courseName": "Aurajuustohärkäpataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 65,
+                "likes": 36,
+                "dislikes": 54,
+                "ranked": 57
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 64,
+            "courseName": "Lohikiusausta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 64,
+                "likes": 97,
+                "dislikes": 68,
+                "ranked": 98
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 62,
+            "courseName": "Kanapyöryköitä chili-kookoskastikkeessa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 62,
+                "likes": 99,
+                "dislikes": 28,
+                "ranked": 98
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 61,
+            "courseName": "Härkää ja possua",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 61,
+                "likes": 84,
+                "dislikes": 50,
+                "ranked": 82
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 60,
+            "courseName": "Kanttarellikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 60,
+                "likes": 55,
+                "dislikes": 27,
+                "ranked": 82
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 59,
+            "courseName": "Broilerikiusaustaa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 59,
+                "likes": 40,
+                "dislikes": 72,
+                "ranked": 43
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 58,
+            "courseName": "Nakki-pekonistroganoff",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 58,
+                "likes": 23,
+                "dislikes": 57,
+                "ranked": 88
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 57,
+            "courseName": "Thaikanakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 57,
+                "likes": 70,
+                "dislikes": 29,
+                "ranked": 32
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 55,
+            "courseName": "Purjo-perunasosekeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 55,
+                "likes": 41,
+                "dislikes": 70,
+                "ranked": 28
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 54,
+            "courseName": "Kananunakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 54,
+                "likes": 86,
+                "dislikes": 98,
+                "ranked": 96
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 53,
+            "courseName": "Rukiisia silakkamurekepihviä",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 53,
+                "likes": 93,
+                "dislikes": 53,
+                "ranked": 51
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 52,
+            "courseName": "Broilerin koipinujia",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 52,
+                "likes": 16,
+                "dislikes": 39,
+                "ranked": 78
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 47,
+            "courseName": "Päivän kalaa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 47,
+                "likes": 86,
+                "dislikes": 13,
+                "ranked": 64
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 46,
+            "courseName": "Peuran jauhelihakeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 46,
+                "likes": 80,
+                "dislikes": 32,
+                "ranked": 12
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 45,
+            "courseName": "Kasvispyöryköitä",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 45,
+                "likes": 44,
+                "dislikes": 64,
+                "ranked": 51
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 44,
+            "courseName": "Kermaista maksakastiketta",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 44,
+                "likes": 38,
+                "dislikes": 17,
+                "ranked": 61
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 43,
+            "courseName": "Makkarakastiketta ",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 43,
+                "likes": 84,
+                "dislikes": 81,
+                "ranked": 98
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 31,
+            "courseName": "Possupataa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 31,
+                "likes": 16,
+                "dislikes": 48,
+                "ranked": 11
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 27,
+            "courseName": "Chili con Carnea",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 27,
+                "likes": 77,
+                "dislikes": 96,
+                "ranked": 64
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 25,
+            "courseName": "Lihamakaroonilaatikkoa",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                }
+            ],
+            "courseVote": {
+                "id": 25,
+                "likes": 80,
+                "dislikes": 19,
+                "ranked": 50
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 21,
+            "courseName": "Broilerin koipinuijia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 21,
+                "likes": 59,
+                "dislikes": 70,
+                "ranked": 26
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 19,
+            "courseName": "Bataattisosekeitto",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 19,
+                "likes": 12,
+                "dislikes": 71,
+                "ranked": 16
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 8,
+            "courseName": "Broilerin koipia",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 8,
+                "likes": 64,
+                "dislikes": 36,
+                "ranked": 47
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 7,
+            "courseName": "Liha-Kaalikeittoa",
+            "courseType": "soup",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 7,
+                "likes": 90,
+                "dislikes": 60,
+                "ranked": 53
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 5,
+            "courseName": "Makkarastroganoff",
+            "courseType": "main",
+            "allergens": [
+                {
+                    "id": 1,
+                    "allergenSymbol": "L"
+                },
+                {
+                    "id": 2,
+                    "allergenSymbol": "G"
+                }
+            ],
+            "courseVote": {
+                "id": 5,
+                "likes": 23,
+                "dislikes": 14,
+                "ranked": 30
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 3,
+            "courseName": "Ylikypsää possun kassleria",
+            "courseType": "main",
+            "allergens": [],
+            "courseVote": {
+                "id": 3,
+                "likes": 48,
+                "dislikes": 71,
+                "ranked": 79
+            }
+        },
+        "count": 1
+    },
+    {
+        "course": {
+            "id": 2,
+            "courseName": "Purjo- Perunasosekeittoa",
+            "courseType": "soup",
+            "allergens": [],
+            "courseVote": {
+                "id": 2,
+                "likes": 91,
+                "dislikes": 91,
+                "ranked": 75
+            }
+        },
+        "count": 1
+    }
+]

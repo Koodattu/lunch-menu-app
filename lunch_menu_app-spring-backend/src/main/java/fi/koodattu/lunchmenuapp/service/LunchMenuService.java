@@ -45,9 +45,9 @@ public class LunchMenuService {
                 course.setId(0);
 
                 LunchMenuCourseVote courseVote = new LunchMenuCourseVote();
-                courseVote.setRanked(new Random().nextInt(90) + 10);
-                courseVote.setLikes(new Random().nextInt(90) + 10);
-                courseVote.setDislikes(new Random().nextInt(90) + 10);
+                courseVote.setRanked(0);
+                courseVote.setLikes(0);
+                courseVote.setDislikes(0);
                 courseVote.setCourse(course);
                 course.setCourseVote(courseVote);
 

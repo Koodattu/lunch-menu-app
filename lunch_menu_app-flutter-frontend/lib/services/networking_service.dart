@@ -10,8 +10,8 @@ import "package:easy_localization/easy_localization.dart";
 import "package:http/http.dart" as http;
 
 const localhostUrl = "http://10.0.2.2:8888";
-const serverUrl = "http://10.0.2.2:8888";
-const currentUrl = localhostUrl;
+const serverUrl = "http://64.226.80.213:8888";
+const currentUrl = serverUrl;
 
 const apiBasePath = "/api/v1";
 
@@ -116,7 +116,7 @@ class NetworkingService {
   }
 
   Future<Object> _getMockData(RestApiType type) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
     String data = "";
     switch (type) {
       case RestApiType.latestMenuWeek:
