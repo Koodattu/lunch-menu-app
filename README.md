@@ -53,3 +53,4 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 * [quicktype](https://app.quicktype.io/)
 * [Baeldung](https://www.baeldung.com/)
 * [dribbble](https://dribbble.com/)
+* [Toptal](https://www.toptal.com/developers/gitignore)
