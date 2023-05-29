@@ -36,6 +36,12 @@ Juha Ala-Rantala ([Koodattu](https://github.com/Koodattu/))
 * 1.0.0
     * Initial release
 
+## Tools used
+
+* IntelliJ Idea
+* Visual Studio Code
+* Postman
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` file for more information.
